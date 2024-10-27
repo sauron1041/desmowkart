@@ -55,7 +55,7 @@
     "middlewares": "src/middlewares",
     "services": "src/services",
     "dtos": "src/dtos",
-    "@modules": "src/modules"
+    "modules": "src/modules"
   },
   "devDependencies": {
     "@types/bcryptjs": "^2.4.6",
