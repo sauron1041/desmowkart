@@ -1,7 +1,6 @@
 require('module-alias/register');
 require('dotenv').config();
 import App from "./app"
-import validateEnv from "@core/utils/validate_env";
 import 'reflect-metadata';
 import { UserRoute } from "modules/user";
 import { AuthRoute } from "modules/auth";
@@ -20,7 +19,6 @@ import { ServiceRequestImageRoute } from "modules/serviceRequestImage";
 import { FeedbackRoute } from "modules/feedback";
 import { ReceptionistEmployeeRoute } from "modules/receptionistEmployee";
 
-validateEnv();
 const routes = [
     new UserRoute(),
     new AuthRoute(),

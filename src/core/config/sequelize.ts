@@ -96,7 +96,7 @@ import ServiceRequest from 'modules/serviceRequest/model';
 import ServiceRequestImage from 'modules/serviceRequestImage/model';
 import Feedback from 'modules/feedback/model';
 import ServiceRequestStatusHistory from 'modules/serviceRequestHistory/model';
-import Order from '@modules/order/model';
+import Order from 'modules/order/model';
 import OrderDetail from 'modules/orderDetail/model';
 import Payment from 'modules/payment/model';
 import EmployeeStatus from 'modules/employeeStatus/model';
