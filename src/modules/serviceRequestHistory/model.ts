@@ -1,5 +1,5 @@
 // models/ServiceRequestHistory.js
-import { Service } from 'model/service';
+
 import ServiceRequest from 'modules/serviceRequest/model';
 import ServiceRequestImages from 'modules/serviceRequestImage/model';
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasOne, HasMany } from 'sequelize-typescript';

@@ -6,14 +6,11 @@ import jwt from 'jsonwebtoken';
 import { TokenService } from "modules/token/service";
 import bcryptjs from 'bcryptjs';
 import ChangePasswordDto from "./dtos/changePassword.dto";
-import UserServices from "services/user.service";
 
 export class AuthService {
     private tokenService: TokenService;
-    private userService: UserServices;
     constructor() {
         this.tokenService = new TokenService();
-        this.userService = new UserServices()
     }
     public login = async (model: Partial<User>) => {
         try {

@@ -1,5 +1,4 @@
 // models/ServiceRequestHistory.js
-import { Service } from 'model/service';
 import { Customer } from 'modules/customer/model';
 import { Employee } from 'modules/employee/model';
 import ServiceRequest from 'modules/serviceRequest/model';

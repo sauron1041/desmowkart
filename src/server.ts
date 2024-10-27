@@ -3,7 +3,6 @@ require('dotenv').config();
 import App from "./app"
 import validateEnv from "@core/utils/validate_env";
 import 'reflect-metadata';
-import { IndexRoute } from "routes";
 import { UserRoute } from "modules/user";
 import { AuthRoute } from "modules/auth";
 import { BranchRoute } from "modules/branch";
@@ -23,7 +22,6 @@ import { ReceptionistEmployeeRoute } from "modules/receptionistEmployee";
 
 validateEnv();
 const routes = [
-    new IndexRoute(),
     new UserRoute(),
     new AuthRoute(),
     new BranchRoute(),
