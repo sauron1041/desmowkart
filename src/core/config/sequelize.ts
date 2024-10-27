@@ -99,7 +99,7 @@ import ServiceRequestStatusHistory from 'modules/serviceRequestHistory/model';
 import Order from 'modules/order/model';
 import OrderDetail from 'modules/orderDetail/model';
 import Payment from 'modules/payment/model';
-import EmployeeStatus from 'modules/EmployeeStatus/model';
+import EmployeeStatus from 'modules/employeeStatus/model';
 import Skill from 'modules/skill/model';
 import EmployeeSkill from 'modules/employeeSkill/model';
 import ServiceSkill from 'modules/serviceSkill/model';
