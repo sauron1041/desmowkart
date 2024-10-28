@@ -101,10 +101,10 @@ export class AppointmentService {
 
             if (key) {
                 searchConditions[Op.and].push({
-                    [Op.or]: [
-                        { name: { [Op.like]: `%${key}%` } },
-                        { phone: { [Op.like]: `%${key}%` } },
-                    ]
+                    // [Op.or]: [
+                        // { name: { [Op.like]: `%${key}%` } },
+                        // { phone: { [Op.like]: `%${key}%` } },
+                    // ]
                 });
             }
 
@@ -176,6 +176,7 @@ export class AppointmentService {
                     customerName: item.customer ? item.customer.user.name : null,
                     employeeName: item.employee ? item.employee.user.name : null,
                     time: item.time,
+                    reminderSent: item.reminderSent,
                 }
             });
             const totalRecords = result.length;

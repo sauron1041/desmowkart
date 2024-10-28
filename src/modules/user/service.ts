@@ -6,25 +6,34 @@ import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 import bcryptjs from 'bcryptjs';
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
+import { CustomerService } from "modules/customer/service";
+import { EmployeeService } from "modules/employee/service";
 
 export class UserService {
+    private customerService = new CustomerService();
+    private employeeService = new EmployeeService();
+
     public create = async (model: Partial<User>) => {
         try {
             const check = await checkExistSequelize(User, 'username', model.username!);
             const code = await generateCodePrefixChar('Users', 'ID', 8);
             model.code = code;
-
-            console.log("model", model);
-            
             if (check) {
                 return new HttpException(400, errorMessages.EXISTED, 'username');
             }
             const passwordHash = await bcryptjs.hash(model.password!, 10);
             model.password = passwordHash;
             const result = await User.create(model);
-            console.log(result);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if (model.roleId != undefined) {
+                if (model.roleId == 2) {
+                    await this.employeeService.create({ userId: result.id });
+                }
+                if (model.roleId == 3) {
+                    await this.customerService.create({ userId: result.id });
+                }
             }
             return {
                 data: result
@@ -225,6 +234,6 @@ export class UserService {
             return {
                 data: result
             }
-        } catch (error) {}
+        } catch (error) { }
     }
 }

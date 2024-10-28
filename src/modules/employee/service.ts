@@ -5,6 +5,7 @@ import { ISearchAndPagination } from "@core/types/express";
 import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
+import User from "modules/user/model";
 
 export class EmployeeService {
     public create = async (model: Partial<Employee>) => {
@@ -79,32 +80,66 @@ export class EmployeeService {
                 [Op.and]: [{}, { ...filteredModel }]
             };
 
-            if (key) {
-                searchConditions[Op.and].push({
-                    [Op.or]: [
-                        { name: { [Op.like]: `%${key}%` } },
-                        { phone: { [Op.like]: `%${key}%` } },
-                    ]
-                });
+            // if (key) {
+            //     searchConditions[Op.and].push({
+            //         [Op.or]: [
+            //             { name: { [Op.like]: `%${key}%` } },
+            //             { phone: { [Op.like]: `%${key}%` } },
+            //         ]
+            //     });
+            // }
+
+            const options: any = {
+                where: searchConditions,
+                order: [['id', 'DESC']],
             }
 
             if (search.page && search.limit) {
                 const pageNumber = parseInt(search.page.toString(), 10);
                 const limitNumber = parseInt(search.limit.toString(), 10);
                 const offset = (pageNumber - 1) * limitNumber;
-                result = await Employee.findAll({
-                    where: searchConditions,
-                    limit: limitNumber,
-                    offset: offset,
-                });
-            } else {
-                result = await Employee.findAll({
-                    where: searchConditions,
-                });
+                // result = await Employee.findAll({
+                //     where: searchConditions,
+                //     limit: limitNumber,
+                //     offset: offset,
+                // });
+                options.limit = limitNumber;
+                options.offset = offset
             }
+            // else {
+            //     result = await Employee.findAll({
+            //         where: searchConditions,
+            //     });
+            // }
+            result = await Employee.findAll(options);
 
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+
+            //map user  to customer
+            for (let i = 0; i < result.length; i++) {
+                const user = await User.findOne({
+                    where: {
+                        id: result[i].userId
+                    }
+                });
+                if (user instanceof Error) {
+                    return new HttpException(400, user.message);
+                }
+                delete result[i].dataValues.userId;
+                delete result[i].dataValues.id;
+                delete user?.dataValues.password;
+                delete user?.dataValues.roleId;
+                delete user?.dataValues.isRemoved;
+                delete user?.dataValues.createdAt;
+                delete user?.dataValues.updatedAt;
+                delete user?.dataValues.status;
+
+                result[i].dataValues = {
+                    ...user?.dataValues,
+                    ...result[i].dataValues
+                }
             }
 
             return {

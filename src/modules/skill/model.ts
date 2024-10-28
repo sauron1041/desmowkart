@@ -1,8 +1,7 @@
 // models/Skill.js
-import EmployeeSkill from 'modules/employeeSkill/model';
 import ServiceSkill from 'modules/serviceSkill/model';
 import { Table, Column, Model, DataType, HasMany } from 'sequelize-typescript';
-
+import EmployeeSkill from 'modules/employeeSkill/model';
 @Table
 class Skill extends Model {
   @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })

@@ -10,8 +10,8 @@ export class Employee extends Model {
     @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
     id?: number;
 
-    @Column({ type: DataType.STRING(100), allowNull: true, defaultValue: '' })
-    name?: string;
+    // @Column({ type: DataType.STRING(100), allowNull: true, defaultValue: '' })
+    // name?: string;
 
     @Column({ type: DataType.STRING(8), allowNull: false })
     code?: string;

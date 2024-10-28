@@ -2,7 +2,7 @@
 import { Customer } from 'modules/customer/model';
 import { Employee } from 'modules/employee/model';
 import { Person } from 'modules/person';
-import { Table, Column, Model, DataType, ForeignKey, HasOne, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, HasOne, BelongsTo, HasMany } from 'sequelize-typescript';
 
 @Table
 class User extends Person {
@@ -18,25 +18,11 @@ class User extends Person {
   @Column({ type: DataType.STRING(255), allowNull: false })
   password?: string;
 
-  // @ForeignKey(() => Customer)
-  // @Column({ type: DataType.INTEGER, allowNull: true })
-  // customerId?: number;
-
-  // @ForeignKey(() => Employee)
-  // @Column({ type: DataType.INTEGER, allowNull: true })
-  // employeeId?: number;
-
   @Column({ type: DataType.STRING(255) })
   avatar?: string;
 
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: true })
   status?: boolean;
-
-  // @Column({ type: DataType.INTEGER })
-  // customerId?: number;
-
-  // @Column({ type: DataType.INTEGER })
-  // employeeId?: number;
 
   @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
   createdAt?: Date;
@@ -47,25 +33,8 @@ class User extends Person {
   @Column({ type: DataType.BOOLEAN, defaultValue: false })
   isRemoved?: boolean;
 
-  // @HasOne(() => Customer, 'userId')
-  // customer?: Customer;
-
-  // @HasOne(() => Employee, 'userId')
-  // employee?: Employee;
-
-  // @BelongsTo(() => Customer, 'customerId')
-  // customerData?: Customer;
-
-  // @BelongsTo(() => Employee, 'employeeId')
-  // employeeData?: Employee;
-
-  // @HasOne(() => Customer)
-  // customer?: Customer;
-
-
-  // @HasOne(() => Employee)
-  // employee?: Employee;
-
+  @Column({ type: DataType.INTEGER })
+  roleId?: number; // Role 1: Admin, 2: Employee, 3: Customer
 }
 
 export default User;

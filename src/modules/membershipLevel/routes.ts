@@ -5,7 +5,7 @@ import multer from "multer";
 import { AuthMiddleware } from "@core/middleware";
 
 export class MembershipLevelRoute implements IRoute {
-    public path = '/appointment';
+    public path = '/membership-level';
     public router = Router();
     public upload = multer({ storage: multer.memoryStorage() });
 

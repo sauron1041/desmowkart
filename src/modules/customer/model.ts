@@ -2,7 +2,7 @@ import Appointment from 'modules/appointment/model';
 import MembershipLevel from 'modules/membershipLevel/model';
 import Order from 'modules/order/model';
 import { Person } from 'modules/person';
-import User  from 'modules/user/model';
+import User from 'modules/user/model';
 import { Table, Column, DataType, ForeignKey, Model, BelongsTo, HasMany, HasOne } from 'sequelize-typescript';
 
 @Table
@@ -11,8 +11,8 @@ export class Customer extends Model {
     @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
     id?: number;
 
-    @Column({ type: DataType.STRING(100), allowNull: true, defaultValue: '' })
-    name?: string;
+    // @Column({ type: DataType.STRING(100), allowNull: true, defaultValue: '' })
+    // name?: string;
 
     @Column({ type: DataType.STRING(10), allowNull: false })
     code?: string;
@@ -42,7 +42,7 @@ export class Customer extends Model {
     membershipLevelDetails?: MembershipLevel;
 
     @ForeignKey(() => User)
-    @Column({ type: DataType.INTEGER, allowNull: true })
+    @Column({ type: DataType.INTEGER, allowNull: false, unique: true })
     userId?: number;
 
     @BelongsTo(() => User)

@@ -6,6 +6,9 @@ import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 import bcryptjs from 'bcryptjs';
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
+import User from "modules/user/model";
+import { RowDataPacket } from "mysql2";
+import { ICustomer } from "./dtos/customer";
 
 export class CustomerService {
     public create = async (model: Partial<Customer>) => {
@@ -79,34 +82,56 @@ export class CustomerService {
                 [Op.and]: [{}, { ...filteredModel }]
             };
 
-            if (key) {
-                searchConditions[Op.and].push({
-                    [Op.or]: [
-                        { name: { [Op.like]: `%${key}%` } },
-                        { phone: { [Op.like]: `%${key}%` } },
-                    ]
-                });
+            // if (key) {
+            //     searchConditions[Op.and].push({
+            //         [Op.or]: [
+            //             { name: { [Op.like]: `%${key}%` } },
+            //             { phone: { [Op.like]: `%${key}%` } },
+            //         ]
+            //     });
+            // }
+
+
+            const options: any = {
+                where: searchConditions,
+                order: [['id', 'DESC']],
             }
 
             if (search.page && search.limit) {
                 const pageNumber = parseInt(search.page.toString(), 10);
                 const limitNumber = parseInt(search.limit.toString(), 10);
                 const offset = (pageNumber - 1) * limitNumber;
-                result = await Customer.findAll({
-                    where: searchConditions,
-                    limit: limitNumber,
-                    offset: offset,
-                });
-            } else {
-                result = await Customer.findAll({
-                    where: searchConditions,
-                });
+                options.limit = limitNumber;
+                options.offset = offset;
             }
-
+            result = await Customer.findAll(options);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
+            //map user  to customer
+            for (let i = 0; i < result.length; i++) {
+                const user = await User.findOne({
+                    where: {
+                        id: result[i].userId
+                    }
+                });
+                if (user instanceof Error) {
+                    return new HttpException(400, user.message);
+                }
+                delete result[i].dataValues.userId; 
+                delete result[i].dataValues.id;
+                delete user?.dataValues.password;
+                delete user?.dataValues.roleId;
+                delete user?.dataValues.isRemoved;
+                delete user?.dataValues.createdAt;
+                delete user?.dataValues.updatedAt;
+                delete user?.dataValues.status;
 
+                result[i].dataValues = {
+                    ...user?.dataValues,
+                    ...result[i].dataValues
+                }
+            }
             return {
                 data: result,
                 pagination: search.page && search.limit ? {
