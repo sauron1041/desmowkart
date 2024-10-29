@@ -46,8 +46,8 @@ class EmployeeStatus extends Model {
   @Column({ type: DataType.INTEGER })
   branchId?: number;
 
-  @BelongsTo(() => Branch)
-  branch?: Branch;
+  // @BelongsTo(() => Branch)
+  // branch?: Branch;
 
 }
 

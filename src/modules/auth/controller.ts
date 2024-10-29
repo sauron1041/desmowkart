@@ -20,7 +20,7 @@ export class AuthController {
             if (result instanceof HttpException) {
                 return sendResponse(res, result.status, result.message);
             }
-            return sendResponse(res, 200, message.LOGIN_SUCCESS, result);
+            else return sendResponse(res, 200, message.LOGIN_SUCCESS, result);
         } catch (error) {
             return new HttpException(500, message.LOGIN_FAILED);
         }

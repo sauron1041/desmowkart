@@ -43,8 +43,8 @@ class Branch extends Model {
   @HasOne(() => Service)
   service?: Service;
 
-  @HasOne(() => EmployeeStatus)
-  employeeStatus?: EmployeeStatus;
+  // @HasOne(() => EmployeeStatus)
+  // employeeStatus?: EmployeeStatus;
 }
 
 export default Branch;

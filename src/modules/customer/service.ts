@@ -132,13 +132,16 @@ export class CustomerService {
                     ...result[i].dataValues
                 }
             }
+            const count = await Customer.count({
+                where: searchConditions
+            });
             return {
                 data: result,
                 pagination: search.page && search.limit ? {
                     page: Number(search.page),
                     limit: Number(search.limit),
                     totalRecords: result.length,
-                    totalPages: Math.ceil(result.length / Number(search.limit))
+                    totalPages: Math.ceil(count / Number(search.limit))
                 } : null
             };
         } catch (error) {

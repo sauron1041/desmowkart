@@ -23,7 +23,7 @@ class Appointment extends Model {
     // status!: number;
 
     @Column({
-        type: DataType.STRING,
+        type: DataType.INTEGER,
         allowNull: true,
         defaultValue: AppointmentStatus.WAITING
     })

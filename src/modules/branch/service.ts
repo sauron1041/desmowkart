@@ -85,7 +85,6 @@ export class BranchService {
                     ]
                 });
             }
-
             if (search.page && search.limit) {
                 const pageNumber = parseInt(search.page.toString(), 10);
                 const limitNumber = parseInt(search.limit.toString(), 10);
@@ -105,12 +104,14 @@ export class BranchService {
                 return new HttpException(400, result.message);
             }
 
+            const count = await Branch.count({ where: searchConditions });
             return {
                 data: result,
                 pagination: search.page && search.limit ? {
                     page: Number(search.page),
                     limit: Number(search.limit),
-                    totalRecords: result.length
+                    totalRecords: result.length,
+                    totalPages: Math.ceil(count / Number(search.limit))
                 } : null
             };
         } catch (error) {
