@@ -8,12 +8,15 @@ import bcryptjs from 'bcryptjs';
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
 import { CustomerService } from "modules/customer/service";
 import { EmployeeService } from "modules/employee/service";
+import EmployeeSkillModel from "modules/employeeSkill/model";
+import CreateUser from "./dtos/create";
+import EmployeeModel from "modules/employee/model";
 
 export class UserService {
     private customerService = new CustomerService();
     private employeeService = new EmployeeService();
 
-    public create = async (model: Partial<User>) => {
+    public create = async (model: Partial<CreateUser>) => {
         try {
             const check = await checkExistSequelize(User, 'username', model.username!);
             const code = await generateCodePrefixChar('Users', 'ID', 8);
@@ -28,8 +31,23 @@ export class UserService {
                 return new HttpException(400, result.message);
             }
             if (model.roleId != undefined) {
+
                 if (model.roleId == 2) {
-                    await this.employeeService.create({ userId: result.id });
+                    const employeeModel = new EmployeeModel();
+                    employeeModel.userId = result.id;
+                    const employeeResult = await this.employeeService.create({ userId: result.id });
+                    if (employeeResult instanceof Error) {
+                    } else {
+                        if(model.employeeSkill){
+                            for (const skill of model.employeeSkill!) {
+                                await EmployeeSkillModel.create({ employeeId: (employeeResult as any).data.id, skillId: skill.skillId });
+                            }
+                        }
+                        // for (const skill of model.employeeSkill!) {
+                        //     await EmployeeSkillModel.create({ employeeId: (employeeResult as any).data.id, skillId: skill.skillId });
+                        // }
+                    }
+
                 }
                 if (model.roleId == 3) {
                     await this.customerService.create({ userId: result.id });

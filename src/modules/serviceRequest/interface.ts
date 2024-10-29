@@ -4,11 +4,10 @@ export interface ISearch {
 }
 
 export enum ServiceRequestStatus {
-    CHECKED_IN = 1,
-    PENDING = 2,
-    SERVING = 3,
-    COMPLETED = 4,
-    CANCELED = 5,
+    PENDING = 1,
+    SERVING = 2,
+    COMPLETED = 3,
+    CANCELED = 4,
 }
 
 

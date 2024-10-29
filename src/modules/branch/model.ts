@@ -1,6 +1,7 @@
 // models/Branch.js
 import Appointment from 'modules/appointment/model';
 import Employee from 'modules/employee/model';
+import EmployeeStatus from 'modules/employeeStatus/model';
 import Service from 'modules/service/model';
 import ServiceRequest from 'modules/serviceRequest/model';
 import { Table, Column, Model, DataType, HasOne, HasMany } from 'sequelize-typescript';
@@ -41,6 +42,9 @@ class Branch extends Model {
 
   @HasOne(() => Service)
   service?: Service;
+
+  @HasOne(() => EmployeeStatus)
+  employeeStatus?: EmployeeStatus;
 }
 
 export default Branch;

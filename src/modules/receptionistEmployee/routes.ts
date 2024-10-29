@@ -17,6 +17,7 @@ export class ReceptionistEmployeeRoute implements IRoute {
     private initializeRoutes() {
         //receptionist-employee
         this.router.patch(this.path + '/appointment/:id', AuthMiddleware.authorization, this.userController.appointmentApproval);
+        this.router.get(this.path + '/check-employee-skill', AuthMiddleware.authorization, this.userController.checkEmployeeSkillsForService);
 
 
 

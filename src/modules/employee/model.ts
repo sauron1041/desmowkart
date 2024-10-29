@@ -1,5 +1,6 @@
 import Appointment from 'modules/appointment/model';
 import Branch from 'modules/branch/model';
+import EmployeeSkill from 'modules/employeeSkill/model';
 import EmployeeStatus from 'modules/employeeStatus/model';
 import { Person } from 'modules/person';
 import { User } from 'modules/user';
@@ -74,6 +75,9 @@ export class Employee extends Model {
 
     @HasOne(() => Appointment)
     appointment?: Appointment;
+
+    @HasMany(() => EmployeeSkill)
+    employeeSkill?: EmployeeSkill[];
 
 }
 export default Employee;

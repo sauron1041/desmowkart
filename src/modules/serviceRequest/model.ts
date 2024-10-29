@@ -50,8 +50,8 @@ class ServiceRequest extends Model {
   @HasOne(() => Feedback)
   feedback!: Feedback;
 
-  @HasMany(() => EmployeeStatus)
-  employeeStatus?: EmployeeStatus[];
+  // @HasMany(() => EmployeeStatus)
+  // employeeStatus?: EmployeeStatus[];
 
   @ForeignKey(() => Branch)
   @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: null })

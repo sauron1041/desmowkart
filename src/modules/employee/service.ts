@@ -6,8 +6,11 @@ import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
 import User from "modules/user/model";
-
+import { EmployeeStatusService } from "modules/employeeStatus/service";
+import EmployeeStatusModel from "modules/employeeStatus/model";
 export class EmployeeService {
+    private employeeStatusService = new EmployeeStatusService();
+
     public create = async (model: Partial<Employee>) => {
         try {
             const code = await generateCodePrefixChar('Employees', 'NV', 8);
@@ -239,5 +242,24 @@ export class EmployeeService {
                 error: error
             }
         }
+    }
+    public findAllEmployeeWithWorkingStatus = async (status: number, branchId: number) => {
+        let modelEmployeeStatus: EmployeeStatusModel = new EmployeeStatusModel();
+        modelEmployeeStatus.employeeStatus = status;
+        modelEmployeeStatus.branchId = branchId;
+
+        console.log("modelEmployeeStatus", modelEmployeeStatus);
+        console.log("this.employeeStatusService", branchId);
+        
+
+        
+        const result = await this.employeeStatusService.findAll(modelEmployeeStatus, {});
+        if (result instanceof HttpException) {
+            return new HttpException(400, errorMessages.NOT_FOUND);
+        }
+        return {
+            data: result ? result.data : []
+        }
+
     }
 }

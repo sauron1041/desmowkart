@@ -1,4 +1,5 @@
 // models/EmployeeStatus.js
+import Branch from 'modules/branch/model';
 import Employee from 'modules/employee/model';
 import Order from 'modules/order/model';
 import Service from 'modules/service/model';
@@ -10,8 +11,8 @@ class EmployeeStatus extends Model {
   @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
   id?: number;
 
-  @Column({ type: DataType.STRING(255), allowNull: false })
-  employeeStatus?: string;
+  @Column({ type: DataType.INTEGER, allowNull: false })
+  employeeStatus?: number; // 0: free, 1: busy, 2: break
 
 
   @Column({ type: DataType.INTEGER })
@@ -34,12 +35,19 @@ class EmployeeStatus extends Model {
   employee?: Employee;
 
 
-  @ForeignKey(() => ServiceRequest)
-  @Column({ type: DataType.INTEGER })
-  serviceRequestId?: number;
+  // @ForeignKey(() => ServiceRequest)
+  // @Column({ type: DataType.INTEGER })
+  // serviceRequestId?: number;
 
-  @BelongsTo(() => ServiceRequest)
-  serviceRequest?: ServiceRequest;
+  // @BelongsTo(() => ServiceRequest)
+  // serviceRequest?: ServiceRequest;
+
+  @ForeignKey(() => Branch)
+  @Column({ type: DataType.INTEGER })
+  branchId?: number;
+
+  @BelongsTo(() => Branch)
+  branch?: Branch;
 
 }
 

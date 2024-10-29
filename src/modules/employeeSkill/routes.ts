@@ -5,7 +5,7 @@ import multer from "multer";
 import { AuthMiddleware } from "@core/middleware";
 
 export class SkillRoute implements IRoute {
-    public path = '/skill';
+    public path = '/employee-skill';
     public router = Router();
     public upload = multer({ storage: multer.memoryStorage() });
 

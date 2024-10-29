@@ -7,6 +7,7 @@ import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
 import AppointmentStatus from "modules/appointment/interface";
+import { checkEmployeeSkillsForService } from "modules/handle/handleSkills";
 export class EmployeeController {
     private userService: EmployeeService;
     constructor() {
@@ -144,6 +145,19 @@ export class EmployeeController {
             return sendResponse(res, 200, message.UPDATE_SUCCESS, result);
         } catch (error) {
             return new HttpException(500, message.UPDATE_FAILED);
+        }
+    }
+    public checkEmployeeSkillsForService = async (req: Request, res: Response) => {
+        const serviceId: number = req.query.serviceId as any;
+        const employeeId: number = req.query.employeeId as any;
+        try {
+            const result = await checkEmployeeSkillsForService(employeeId, serviceId);
+            console.log("result", result);
+            if (result == false) {
+                return sendResponse(res, 400, message.EMPLOYY_NOT_ENOUGH_SKILL, false);
+            } else return sendResponse(res, 200, message.EMPLOY_ENOUGH_SKILL, true);
+        } catch (error) {
+            return new HttpException(500, message.FIND_FAILED);
         }
     }
 }

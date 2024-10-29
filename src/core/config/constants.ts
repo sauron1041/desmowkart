@@ -231,6 +231,16 @@ const errorMessages = {
     // SERVING: 'Đang Phục Vụ',
     // COMPLETED: 'Hoàn Thành',
     // CANCELED: 'Đã Hủy',
+
+
+    NOT_ENOUGH_SKILL: 'Không đủ kỹ năng',
+    NOT_ENOUGH_EMPLOYEE: 'Không đủ nhân viên',
+    NOT_ENOUGH_SERVICE: 'Không đủ dịch vụ',
+    NOT_ENOUGH_SLOT: 'Không đủ slot',
+    NOT_ENOUGH_SLOT_SERVICE: 'Không đủ slot dịch vụ',
+    NOT_ENOUGH_SLOT_EMPLOYEE: 'Không đủ slot nhân viên',
+    EMPLOYY_NOT_ENOUGH_SKILL: 'Nhân viên không đủ kỹ năng',
+    EMPLOY_ENOUGH_SKILL: 'Nhân viên đủ kỹ năng',
 }
 
 export default errorMessages;

@@ -133,4 +133,17 @@ export class EmployeeController {
             return new HttpException(500, message.DELETE_FAILED);
         }
     }
+    public findAllEmployeeWithWorkingStatus = async (req: Request, res: Response) => {
+        const branchId: number = req.query.branchId as any;
+        const employeeStatus: number = req.query.employeeStatus as any;
+        try {
+            const result = await this.userService.findAllEmployeeWithWorkingStatus(employeeStatus, branchId);
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.FIND_ALL_SUCCESS, result);
+        } catch (error) {
+            return new HttpException(500, message.FIND_ALL_FAILED);
+        }
+    }
 }

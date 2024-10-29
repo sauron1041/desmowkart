@@ -70,6 +70,8 @@ export class EmployeeStatusService {
         }
     }
     public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
+        console.log("model", model);
+        
         try {
             let result;
             const { page, limit, key, ...filteredModel } = model as any;
@@ -100,7 +102,8 @@ export class EmployeeStatusService {
                     where: searchConditions,
                 });
             }
-
+            console.log("result", result);
+            
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
@@ -116,9 +119,9 @@ export class EmployeeStatusService {
         } catch (error) {
             console.log(error);
 
-            return {
-                error: error
-            };
+            // return {
+            //     error: error
+            // };
         }
     }
     public findOne = async (model: Partial<Skill>) => {
