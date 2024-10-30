@@ -1,5 +1,6 @@
 import database from "@core/config/database";
 import { RowDataPacket } from "mysql2";
+import { Op } from "sequelize";
 
 export const checkExist = async (tableName: string, column: string, value: string, id?: string) => {
     let query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
@@ -14,7 +15,20 @@ export const checkExist = async (tableName: string, column: string, value: strin
     return false
 }
 
-export const checkExistSequelize = async (model: any, column: string, value: string | number, id?: string) => {
+export const checkExistSequelize = async (model: any, column: string, value: string | number, id?: string | number) => {
+    if (id) {
+        const checkExist = await model.findOne({
+            where: {
+                [column]: value,
+                id: {
+                    [Op.ne]: id
+                }
+            }
+        });
+        if (checkExist)
+            return checkExist;
+        return false
+    }
     const checkExist = await model.findOne({
         where: {
             [column]: value
