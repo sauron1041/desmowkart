@@ -113,13 +113,17 @@ export class ServiceService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
+            const count = await Service.count({
+                where: searchConditions
+            })
 
             return {
                 data: result,
                 pagination: search.page && search.limit ? {
                     page: Number(search.page),
                     limit: Number(search.limit),
-                    totalRecords: result.length
+                    totalRecords: result.length,
+                    totalPages: Math.ceil(count / Number(search.limit)),
                 } : null
             };
         } catch (error) {
