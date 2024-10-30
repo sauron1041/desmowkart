@@ -24,7 +24,7 @@ export class AppointmentService {
 
     public create = async (model: Partial<Appointment>) => {
         try {
-            const code = await generateCodePrefixChar('Appointments', 'AN', 8);
+            const code = await generateCodePrefixChar('Appointments', 'LH', 8);
             model.code = code;
             const result = await Appointment.create(model);
             if (result instanceof Error) {

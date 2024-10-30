@@ -15,6 +15,30 @@ class Branch extends Model {
   @Column({ type: DataType.STRING(255), allowNull: false })
   name?: string;
 
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  phone?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  email?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  description?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  avatar?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  address?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  city?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  district?: string;
+
+  @Column({ type: DataType.STRING(255), allowNull: true })
+  ward?: string;
+
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: true })
   status?: boolean;
 

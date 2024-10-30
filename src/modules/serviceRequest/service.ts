@@ -28,7 +28,7 @@ export class ServiceRequestService {
     public create = async (model: Partial<Skill>) => {
         try {
             model.currentStatus != undefined ? model.currentStatus = model.currentStatus : model.currentStatus = ServiceRequestStatus.PENDING;
-            model.code = await generateCodePrefixChar('ServiceRequests', 'SN', 10);
+            model.code = await generateCodePrefixChar('ServiceRequests', 'YC', 8);
             const result = await Skill.create(model);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);

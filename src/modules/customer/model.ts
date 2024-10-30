@@ -50,6 +50,21 @@ export class Customer extends Model {
 
     @HasOne(() => Order)
     order?: Order;
+
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    avatar?: string;
+  
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    address?: string;
+  
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    city?: string;
+  
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    district?: string;
+  
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    ward?: string;
 }
 
 export default Customer;
