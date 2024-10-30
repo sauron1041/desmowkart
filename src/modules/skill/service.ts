@@ -32,7 +32,7 @@ export class SkillService {
             if (!check) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
-            const checkName = await checkExistSequelize(Skill, 'name', model.name!);
+            const checkName = await checkExistSequelize(Skill, 'name', model.name!, id);
             if (checkName) {
                 return new HttpException(400, errorMessages.EXISTED, 'name');
             }
