@@ -100,12 +100,14 @@ export class EmployeeService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await Employee.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                 });
             } else {
                 result = await Employee.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                 });
             }
 
@@ -186,6 +188,9 @@ export class EmployeeService {
             const result = await checkExistSequelize(Employee, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result

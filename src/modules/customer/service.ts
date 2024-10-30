@@ -209,6 +209,9 @@ export class CustomerService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
+            }
             return {
                 data: result
             }

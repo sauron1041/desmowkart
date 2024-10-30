@@ -105,12 +105,14 @@ export class ServiceRequestHistoryService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await ServiceRequestHistory.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                 });
             } else {
                 result = await ServiceRequestHistory.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                 });
             }
 
@@ -187,6 +189,9 @@ export class ServiceRequestHistoryService {
             const result = await checkExistSequelize(ServiceRequestHistory, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result

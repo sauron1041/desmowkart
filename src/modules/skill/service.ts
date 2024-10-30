@@ -99,12 +99,14 @@ export class SkillService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await Skill.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                 });
             } else {
                 result = await Skill.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                 });
             }
 
@@ -181,6 +183,9 @@ export class SkillService {
             const result = await checkExistSequelize(Skill, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result

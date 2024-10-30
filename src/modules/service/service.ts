@@ -100,6 +100,7 @@ export class ServiceService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await Service.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                     include: [
@@ -110,6 +111,7 @@ export class ServiceService {
             } else {
                 result = await Service.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     include: [
                         { model: Category, attributes: ['id', 'name'] },
                         { model: Branch, attributes: ['id', 'name'] },
@@ -194,6 +196,9 @@ export class ServiceService {
             const result = await checkExistSequelize(Service, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result

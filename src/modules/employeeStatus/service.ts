@@ -97,12 +97,14 @@ export class EmployeeStatusService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await Skill.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                 });
             } else {
                 result = await Skill.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                 });
             }
             console.log("result", result);
@@ -180,6 +182,9 @@ export class EmployeeStatusService {
             const result = await checkExistSequelize(Skill, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result

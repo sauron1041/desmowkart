@@ -99,12 +99,14 @@ export class CategoryService {
                 const offset = (pageNumber - 1) * limitNumber;
                 result = await Service.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                     limit: limitNumber,
                     offset: offset,
                 });
             } else {
                 result = await Service.findAll({
                     where: searchConditions,
+                    order: [['id', 'DESC']],
                 });
             }
 
@@ -181,6 +183,9 @@ export class CategoryService {
             const result = await checkExistSequelize(Service, 'id', id);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+            if(!result) {
+                return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
                 data: result
