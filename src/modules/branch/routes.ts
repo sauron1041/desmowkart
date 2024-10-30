@@ -22,7 +22,7 @@ export class BranchRoute implements IRoute {
         this.router.delete(this.path + '/delete-list', AuthMiddleware.authorization, this.branchController.deleteList);
         this.router.delete(this.path + '/:id', AuthMiddleware.authorization, this.branchController.delete);
         this.router.get(this.path + '/find-one/:id', AuthMiddleware.authorization, this.branchController.findOne);
-        this.router.get(this.path + '/find-by-id:id', AuthMiddleware.authorization, this.branchController.findById);
+        this.router.get(this.path + '/find-by-id/:id', AuthMiddleware.authorization, this.branchController.findById);
         this.router.get(this.path + '/', AuthMiddleware.authorization, this.branchController.findAll);
     }
 }

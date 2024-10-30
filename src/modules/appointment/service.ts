@@ -61,9 +61,11 @@ export class AppointmentService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            // 
             return {
-                data: model
+                data: {
+                    id: result[0],
+                    ...model
+                }
             }
         } catch (error) {
             return {
@@ -102,8 +104,8 @@ export class AppointmentService {
             if (key) {
                 searchConditions[Op.and].push({
                     // [Op.or]: [
-                        // { name: { [Op.like]: `%${key}%` } },
-                        // { phone: { [Op.like]: `%${key}%` } },
+                    // { name: { [Op.like]: `%${key}%` } },
+                    // { phone: { [Op.like]: `%${key}%` } },
                     // ]
                 });
             }

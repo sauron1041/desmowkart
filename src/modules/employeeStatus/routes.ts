@@ -22,7 +22,7 @@ export class EmployeeStatusRoute implements IRoute {
         this.router.delete(this.path + '/delete-list', AuthMiddleware.authorization, this.skillController.deleteList);
         this.router.delete(this.path + '/:id', AuthMiddleware.authorization, this.skillController.delete);
         this.router.get(this.path + '/find-one/:id', AuthMiddleware.authorization, this.skillController.findOne);
-        this.router.get(this.path + '/find-by-id:id', AuthMiddleware.authorization, this.skillController.findById);
+        this.router.get(this.path + '/find-by-id/:id', AuthMiddleware.authorization, this.skillController.findById);
         this.router.get(this.path + '/', AuthMiddleware.authorization, this.skillController.findAll);
     }
 }

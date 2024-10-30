@@ -37,7 +37,10 @@ export class SkillService {
                 return new HttpException(400, result.message);
             }
             return {
-                data: result
+                data: {
+                    id: result[0],
+                    ...model
+                }
             }
         } catch (error) {
             return {

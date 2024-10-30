@@ -32,6 +32,10 @@ export class CategoryService {
             if (!check) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
+            const checkName = await checkExistSequelize(Service, 'name', model.name!);
+            if (checkName) {
+                return new HttpException(400, errorMessages.EXISTED, 'name');
+            }
             const result = await Service.update(model, {
                 where: {
                     id: id
@@ -41,7 +45,10 @@ export class CategoryService {
                 return new HttpException(400, result.message);
             }
             return {
-                data: result
+                data: {
+                    id: result[0],
+                    ...model
+                }
             }
         } catch (error) {
             return {

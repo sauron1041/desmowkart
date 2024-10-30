@@ -8,10 +8,6 @@ import { Op } from 'sequelize';
 export class ServiceSkillService {
     public create = async (model: Partial<Skill>) => {
         try {
-            const check = await checkExistSequelize(Skill, 'name', model.name!);
-            if (check) {
-                return new HttpException(400, errorMessages.EXISTED, 'name');
-            }
             const result = await Skill.create(model);
             console.log(result);
             if (result instanceof Error) {
@@ -41,7 +37,10 @@ export class ServiceSkillService {
                 return new HttpException(400, result.message);
             }
             return {
-                data: result
+                data: {
+                    id: result[0],
+                    ...model
+                }
             }
         } catch (error) {
             return {
