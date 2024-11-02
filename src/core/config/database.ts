@@ -60,21 +60,21 @@ class Database {
             }
         }
     }
-    async query(query: string, params?: any[]) {
-        let connection: mysql.PoolConnection | null = null;
-        try {
-            connection = await this.getConnection();
-            const [results] = await connection.query(query, params);
-            return results;
-        } catch (error) {
-            Logger.error("query failed");
-            throw error;
-        } finally {
-            if (connection) {
-                await this.closeConnection(connection);
-            }
-        }
-    }
+    // async query(query: string, params?: any[]) {
+    //     let connection: mysql.PoolConnection | null = null;
+    //     try {
+    //         connection = await this.getConnection();
+    //         const [results] = await connection.query(query, params);
+    //         return results;
+    //     } catch (error) {
+    //         Logger.error("query failed");
+    //         throw error;
+    //     } finally {
+    //         if (connection) {
+    //             await this.closeConnection(connection);
+    //         }
+    //     }
+    // }
     async queryOne(query: string, params?: any[]) {
         let connection: mysql.PoolConnection | null = null;
         try {
@@ -90,6 +90,92 @@ class Database {
             }
         }
     }
+    async beginTransaction() {
+        let connection: mysql.PoolConnection | null = null;
+        try {
+            connection = await this.getConnection();
+            await connection.beginTransaction();
+            return connection;
+        } catch (error) {
+            Logger.error("begin transaction failed");
+            throw error;
+        }
+    }
+    async commitTransaction(connection: mysql.PoolConnection) {
+        try {
+            await connection.commit();
+        } catch (error) {
+            Logger.error("commit transaction failed");
+            throw error;
+        } finally {
+            if (connection) {
+                await this.closeConnection(connection);
+            }
+        }
+    }
+    async rollbackTransaction(connection: mysql.PoolConnection) {
+        try {
+            await connection.rollback();
+        } catch (error) {
+            Logger.error("rollback transaction failed");
+            throw error;
+        } finally {
+            if (connection) {
+                await this.closeConnection(connection);
+            }
+        }
+    }
+    async  createTransaction() {
+        let connection: mysql.PoolConnection | null = null;
+        try {
+            connection = await this.getConnection();
+            await connection.beginTransaction();
+            return connection;
+        } catch (error) {
+            Logger.error("create transaction failed");
+            throw error;
+        }
+    }
+    async endTransaction(connection: mysql.PoolConnection) {
+        try {
+            await connection.commit();
+        } catch (error) {
+            Logger.error("end transaction failed");
+            throw error;
+        } finally {
+            if (connection) {
+                await this.closeConnection(connection);
+            }
+        }
+    }
+    async transaction(connection: mysql.PoolConnection, query: string, params?: any[]) {
+        try {
+            await connection.query(query, params);
+        } catch (error) {
+            Logger.error("transaction failed");
+            throw error;
+        }
+    }
+    // const result = await sequelize.query(
+    //     `SELECT * FROM orders WHERE id IN (SELECT orderId FROM orderDetails WHERE id = ${orderDetailId})`,
+    //     { type: sequelize.QueryTypes.SELECT }
+    
+    async query(query: string, params?: any[]) {
+        let connection: mysql.PoolConnection | null = null;
+        try {
+            connection = await this.getConnection();
+            const [results] = await connection.query(query, params);
+            return results;
+        } catch (error) {
+            Logger.error("query failed");
+            throw error;
+        } finally {
+            if (connection) {
+                await this.closeConnection(connection);
+            }
+        }
+    }
+
 }
 
 export default new Database();

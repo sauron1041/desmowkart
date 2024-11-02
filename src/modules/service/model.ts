@@ -3,6 +3,7 @@ import Category from 'modules/category/model';
 import Branch from 'modules/branch/model';
 import Appointment from 'modules/appointment/model';
 import Employee from 'modules/employee/model';
+import { OrderDetail } from 'modules/orderDetail';
 
 @Table
 class Service extends Model {
@@ -54,10 +55,8 @@ class Service extends Model {
   @BelongsTo(() => Branch)
   branch!: Branch;
 
-
-  //
-  // @HasOne(() => Session)
-  // session!: Session;
+  @HasMany(() => OrderDetail) // Changed from HasOne to HasMany
+  orderDetails!: OrderDetail[]; 
 }
 
 export default Service;

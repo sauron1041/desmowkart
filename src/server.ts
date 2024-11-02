@@ -18,6 +18,8 @@ import { CloudDinaryRoute } from "modules/cloudinary";
 import { ServiceRequestImageRoute } from "modules/serviceRequestImage";
 import { FeedbackRoute } from "modules/feedback";
 import { ReceptionistEmployeeRoute } from "modules/receptionistEmployee";
+import { OrderRoute } from "modules/order";
+import { OrderDetailRoute } from "modules/orderDetail";
 
 const routes = [
     new UserRoute(),
@@ -35,7 +37,9 @@ const routes = [
     new CloudDinaryRoute(),
     new ServiceRequestImageRoute(),
     new FeedbackRoute(),
-    new ReceptionistEmployeeRoute()
+    new ReceptionistEmployeeRoute(),
+    new OrderRoute(),
+    new OrderDetailRoute()
 ];
 
 const app = new App(routes);

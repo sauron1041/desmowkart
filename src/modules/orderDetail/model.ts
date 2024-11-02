@@ -1,7 +1,7 @@
 // models/OrderDetail.js
 import Order from 'modules/order/model';
 import Service from 'modules/service/model';
-import { Table, Column, Model, DataType, ForeignKey, BelongsTo } from 'sequelize-typescript';
+import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasOne } from 'sequelize-typescript';
 
 @Table
 class OrderDetail extends Model {
@@ -9,12 +9,18 @@ class OrderDetail extends Model {
   id?: number;
 
   @ForeignKey(() => Order)
-  @Column({ type: DataType.INTEGER })
+  @Column({ type: DataType.INTEGER, allowNull: false })
   orderId?: number;
 
   @ForeignKey(() => Service)
   @Column({ type: DataType.INTEGER })
   serviceId?: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 1 })
+  quantity?: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: false, defaultValue: 0 })
+  price?: number;
 
   @Column({ type: DataType.INTEGER })
   userId?: number;
@@ -33,6 +39,12 @@ class OrderDetail extends Model {
 
   @BelongsTo(() => Service)
   service?: Service;
+
+  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
+  discount?: number;
+
+  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
+  discountType?: number;
 }
 
 export default OrderDetail;

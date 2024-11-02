@@ -20,6 +20,6 @@ export class AuthRoute implements IRoute {
         this.router.post(this.path + '/login', AuthMiddleware.authorization, errorMiddleware(LoginDto, 'body', false), this.authController.login);
         this.router.post(this.path + '/logout', AuthMiddleware.authorization, this.authController.logout);
         this.router.post(this.path + '/refresh-token', AuthMiddleware.authorization, this.authController.refreshToken);
-        this.router.post(this.path + '/change-password', AuthMiddleware.authorization, errorMiddleware(ChangePasswordDto, 'body', false), this.authController.changePassword);
+        this.router.put(this.path + '/change-password', AuthMiddleware.authorization, errorMiddleware(ChangePasswordDto, 'body', false), this.authController.changePassword);
     }
 }

@@ -11,6 +11,7 @@ import { EmployeeService } from "modules/employee/service";
 import EmployeeSkillModel from "modules/employeeSkill/model";
 import CreateUser from "./dtos/create";
 import EmployeeModel from "modules/employee/model";
+import { avatars } from "@core/mocks/avatar";
 
 export class UserService {
     private customerService = new CustomerService();
@@ -26,6 +27,9 @@ export class UserService {
             }
             const passwordHash = await bcryptjs.hash(model.password!, 10);
             model.password = passwordHash;
+            if (model.avatar == undefined) {
+                model.avatar = avatars[Math.floor(Math.random() * avatars.length)].imageUrl
+            }
             const result = await User.create(model);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
@@ -35,10 +39,10 @@ export class UserService {
                 if (model.roleId == 2) {
                     const employeeModel = new EmployeeModel();
                     employeeModel.userId = result.id;
-                    const employeeResult = await this.employeeService.create({ userId: result.id });
+                    const employeeResult = await this.employeeService.create({ userId: result.id, avatar: model.avatar });
                     if (employeeResult instanceof Error) {
                     } else {
-                        if(model.employeeSkill){
+                        if (model.employeeSkill) {
                             for (const skill of model.employeeSkill!) {
                                 await EmployeeSkillModel.create({ employeeId: (employeeResult as any).data.id, skillId: skill.skillId });
                             }
@@ -50,7 +54,7 @@ export class UserService {
 
                 }
                 if (model.roleId == 3) {
-                    await this.customerService.create({ userId: result.id });
+                    await this.customerService.create({ userId: result.id, avatar: model.avatar });
                 }
             }
             return {
@@ -220,7 +224,7 @@ export class UserService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {

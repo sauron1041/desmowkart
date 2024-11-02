@@ -13,6 +13,7 @@ import { User } from "modules/user";
 import { Employee } from "modules/employee";
 import Service from "modules/service/model";
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
+import ServiceRequest from "modules/serviceRequest/model";
 
 export class AppointmentService {
 
@@ -254,7 +255,7 @@ export class AppointmentService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
@@ -299,13 +300,19 @@ export class AppointmentService {
                 return new HttpException(400, result.message);
             }
             // create service request
-            const serviceRequest = await this.serviceRequestService.create({
-                appointmentId: id,
-                currentStatus: status as any,
-                userId: check.dataValues.userId,
-                appointment: check,
-                branchId: check.dataValues.branchId,
-            })
+            const checkServiceRequestExist = await checkExistSequelize(ServiceRequest, 'appointmentId', id);
+            console.log("checkServiceRequestExist", checkServiceRequestExist);
+
+            if (checkServiceRequestExist) {
+            } else {
+                const serviceRequest = await this.serviceRequestService.create({
+                    appointmentId: id,
+                    currentStatus: status as any,
+                    userId: check.dataValues.userId,
+                    appointment: check,
+                    branchId: check.dataValues.branchId,
+                })
+            }
             return {
                 data: {
                     status: status

@@ -5,11 +5,10 @@ import { ISearchAndPagination } from "@core/types/express";
 import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 
-export class SkillService {
+export class OrderDetailService {
     public create = async (model: Partial<Skill>) => {
         try {
             const result = await Skill.create(model);
-            console.log(result);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
@@ -176,7 +175,7 @@ export class SkillService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
@@ -199,6 +198,22 @@ export class SkillService {
             }
             return {
                 data: ids
+            }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+    public deleteByOrderId = async (orderId: number) => {
+        try {
+            const result = await Skill.destroy({
+                where: {
+                    orderId: orderId
+                }
+            });
+            return {
+                data: result
             }
         } catch (error) {
             return {
