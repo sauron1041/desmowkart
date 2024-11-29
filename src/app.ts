@@ -115,6 +115,7 @@ import UserConnection from 'modules/socket/userConnection';
 import eventEmitterInstance from '@core/pubSub/pubSub';
 import { HandleQueue } from 'modules/queue/service';
 import SocketService from 'modules/socket/service';
+import { Logger } from '@core/utils';
 
 class App {
     public app: express.Application;
@@ -125,9 +126,11 @@ class App {
     // private customerConnection: Record<string, string> = {};
     private queue = new HandleQueue
     private socketService = SocketService.getInstance();
+    public port: number | string
 
     constructor(routes?: IRoute[]) {
         this.app = express();
+        this.port = process.env.PORT || 3001;
         this.eventEmitter();
         this.server = http.createServer(this.app);  // Ensure you create the HTTP server
         this.initialMiddlewares();
@@ -200,10 +203,18 @@ class App {
     }
 
     // Start the express server
+    // public listen() {
+    //     this.server.listen(process.env.PORT || 10000, () => {
+    //         console.log(`Server is running on port ${process.env.PORT || 10000}`);
+    //     });
+    // }
     public listen() {
-        this.server.listen(process.env.PORT || 10000, () => {
-            console.log(`Server is running on port ${process.env.PORT || 10000}`);
-        });
+        // if (this.production) {
+        // } else {
+        this.app.listen(this.port, () => {
+            Logger.info(`Server is running on port ${this.port}`)
+        })
+        // }
     }
     private async initialRoutes(routes: IRoute[]) {
         // routes.forEach(route => {
