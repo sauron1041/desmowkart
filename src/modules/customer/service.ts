@@ -16,9 +16,9 @@ export class CustomerService {
             const code = await generateCodePrefixChar('Customers', 'KH', 8);
             model.code = code;
             model.userId = model.id;
-            model.id = undefined;
+            // model.id = undefined;
             const result = await Customer.create(model);
-            console.log(result);
+            console.log("result", result);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }

@@ -1,15 +1,15 @@
-import { SkillController } from "./controller";
+import { EmployeeSkillController } from "./controller";
 import { IRoute } from "@core/interfaces";
 import { Router } from "express";
 import multer from "multer";
 import { AuthMiddleware } from "@core/middleware";
 
-export class SkillRoute implements IRoute {
+export class EmployeeSkillRoute implements IRoute {
     public path = '/employee-skill';
     public router = Router();
     public upload = multer({ storage: multer.memoryStorage() });
 
-    public skillController = new SkillController();
+    public skillController = new EmployeeSkillController();
 
     constructor() {
         this.initializeRoutes();
@@ -23,6 +23,7 @@ export class SkillRoute implements IRoute {
         this.router.delete(this.path + '/:id', AuthMiddleware.authorization, this.skillController.delete);
         this.router.get(this.path + '/find-one/:id', AuthMiddleware.authorization, this.skillController.findOne);
         this.router.get(this.path + '/find-by-id/:id', AuthMiddleware.authorization, this.skillController.findById);
+        this.router.get(this.path + '/get-employees-for-service', this.skillController.getEmployeesForService);
         this.router.get(this.path + '/', AuthMiddleware.authorization, this.skillController.findAll);
     }
 }

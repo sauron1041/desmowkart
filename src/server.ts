@@ -20,12 +20,14 @@ import { FeedbackRoute } from "modules/feedback";
 import { ReceptionistEmployeeRoute } from "modules/receptionistEmployee";
 import { OrderRoute } from "modules/order";
 import { OrderDetailRoute } from "modules/orderDetail";
+import { EmployeeSkillRoute } from "modules/employeeSkill";
 
 const routes = [
     new UserRoute(),
     new AuthRoute(),
     new BranchRoute(),
     new CategoryRoute(),
+    new EmployeeSkillRoute(),
     new SkillRoute(),
     new ServiceRoute(),
     new CustomerRoute(),
@@ -39,9 +41,9 @@ const routes = [
     new FeedbackRoute(),
     new ReceptionistEmployeeRoute(),
     new OrderRoute(),
-    new OrderDetailRoute()
+    new OrderDetailRoute(),
 ];
 
 const app = new App(routes);
 
-app.listen();
+// app.listen();

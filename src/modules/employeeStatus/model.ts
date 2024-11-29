@@ -13,7 +13,7 @@ class EmployeeStatus extends Model {
 
   @Column({ type: DataType.INTEGER, allowNull: false })
   employeeStatus?: number; // 0: free, 1: busy, 2: break
-
+  // 0 ranh, 1 ban, 2 nghi
 
   @Column({ type: DataType.INTEGER })
   userId?: number;
@@ -33,7 +33,6 @@ class EmployeeStatus extends Model {
 
   @BelongsTo(() => Employee)
   employee?: Employee;
-
 
   // @ForeignKey(() => ServiceRequest)
   // @Column({ type: DataType.INTEGER })

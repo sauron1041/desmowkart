@@ -6,10 +6,49 @@ import { HttpException } from "@core/exceptions";
 import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
+import { Customer } from "modules/customer/model";
+import { Employee } from "modules/employee/model";
+import CreateEmpoyeeDto from "./dtos/createEmployeeDto";
+import CreateCustomerDto from "./dtos/createCustomerDto";
 export class UserController {
     private userService: UserService;
     constructor() {
         this.userService = new UserService();
+    }
+    public createEmployee = async (req: Request, res: Response) => {
+        const model: CreateEmpoyeeDto = req.body as any as CreateEmpoyeeDto;
+        model.roleId = 2;
+        try {
+            const result = await this.userService.createEmployeeAccount(model);
+            if (result instanceof HttpException && result.field) {
+                return sendResponse(res, result.status, result.message, null, result.field);
+            }
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.CREATE_SUCCESS, result);
+
+        } catch (error) {
+            return new HttpException(500, message.CREATE_FAILED);
+        }
+    }
+
+    public createCustomer = async (req: Request, res: Response) => {
+        const model: CreateCustomerDto = req.body as any as CreateCustomerDto;
+        model.roleId = 3;
+        try {
+            const result = await this.userService.createCustomerAccount(model);
+            if (result instanceof HttpException && result.field) {
+                return sendResponse(res, result.status, result.message, null, result.field);
+            }
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.CREATE_SUCCESS, result);
+
+        } catch (error) {
+            return new HttpException(500, message.CREATE_FAILED);
+        }
     }
     public create = async (req: Request, res: Response) => {
         const model: User = req.body as any as User;

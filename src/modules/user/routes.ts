@@ -15,6 +15,8 @@ export class UserRoute implements IRoute {
         this.initializeRoutes();
     }
     private initializeRoutes() {
+        this.router.post(this.path + '/create-employee', AuthMiddleware.authorization, this.userController.createEmployee);
+        this.router.post(this.path + '/create-customer', AuthMiddleware.authorization, this.userController.createCustomer);
         this.router.post(this.path + '/', AuthMiddleware.authorization, this.userController.create);
         this.router.patch(this.path + '/:id', AuthMiddleware.authorization, this.userController.update);
         this.router.put(this.path + '/update-list-status', AuthMiddleware.authorization, this.userController.updateListStatus);
