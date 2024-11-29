@@ -201,8 +201,8 @@ class App {
 
     // Start the express server
     public listen() {
-        this.server.listen(process.env.PORT || 3001, () => {
-            console.log(`Server is running on port ${process.env.PORT || 3001}`);
+        this.server.listen(process.env.PORT || 10000, () => {
+            console.log(`Server is running on port ${process.env.PORT || 10000}`);
         });
     }
     private async initialRoutes(routes: IRoute[]) {
