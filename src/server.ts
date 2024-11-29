@@ -46,4 +46,4 @@ const routes = [
 
 const app = new App(routes);
 
-// app.listen();
+app.listen();

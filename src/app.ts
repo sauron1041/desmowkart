@@ -139,7 +139,7 @@ class App {
             cors: { origin: true, credentials: true },
         });
         this.setUpSocketIo();
-        this.listen();
+        // this.listen();
         routes ? this.initialRoutes(routes) : '';
         this.connectMySql();
         this.handleQueue();
