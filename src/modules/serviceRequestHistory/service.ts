@@ -27,14 +27,6 @@ export class ServiceRequestHistoryService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-
-            if(model.serviceRequestImages != undefined  ) {
-                for (const image of model.serviceRequestImages) {
-                    image.serviceRequestStatusHistoryId = result.id;
-                    image.employeeId = model.userId;
-                    await this.serviceRequestImageService.create(image);
-                }
-            }
             return {
                 data: result
             }

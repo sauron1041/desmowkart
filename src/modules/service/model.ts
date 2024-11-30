@@ -16,8 +16,7 @@ class Service extends Model {
   @Column({ type: DataType.TEXT })
   description!: string;
 
-  @Column({ type: DataType.INTEGER })
-  // @Column({ type: DataType.DECIMAL(10, 2) })
+  @Column({ type: DataType.DECIMAL(10, 2) })
   price!: number;
 
   @Column({ type: DataType.BOOLEAN, allowNull: false, defaultValue: true })
@@ -49,6 +48,7 @@ class Service extends Model {
   @HasMany(() => Appointment)
   appointments!: Appointment[];
 
+
   @BelongsTo(() => Category)
   category!: Category;
 
@@ -56,10 +56,7 @@ class Service extends Model {
   branch!: Branch;
 
   @HasMany(() => OrderDetail) // Changed from HasOne to HasMany
-  orderDetails!: OrderDetail[];
-
-  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
-  pricePerSession!: number;
+  orderDetails!: OrderDetail[]; 
 }
 
 export default Service;

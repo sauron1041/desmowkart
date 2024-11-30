@@ -24,7 +24,6 @@ import EmployeeStatus from 'modules/employeeStatus/model';
 import Skill from 'modules/skill/model';
 import EmployeeSkill from 'modules/employeeSkill/model';
 import ServiceSkill from 'modules/serviceSkill/model';
-import UserConnection from 'modules/socket/userConnection';
 
 dotenv.config();
 
@@ -35,7 +34,7 @@ interface IDatabaseConfig {
     host: string;
     port: number;
     dialect: Dialect;
-    ssl?: boolean;
+    ssl: boolean;
 }
 
 const dbConfig: IDatabaseConfig = {
@@ -47,17 +46,6 @@ const dbConfig: IDatabaseConfig = {
     dialect: 'mysql',
     ssl: process.env.DB_SSL === 'true',
 };
-// const dbConfig: IDatabaseConfig = {
-//     username: process.env.DB_USERNAME || 'root',
-//     password: process.env.DB_PASSWORD || '12345678',
-//     database: process.env.DB_NAME || 'beauty_salon_management_system_v4',
-//     host: process.env.DB_HOST || 'localhost',
-//     // port: parseInt(process.env.DB_PORT || '12706'),
-//     port: Number(process.env.DB_PORT) || 3306,
-//     dialect: 'mysql',
-//     // ssl: process.env.DB_SSL === 'true',
-// };
-
 
 class Database {
     private static instance: Sequelize;
@@ -76,7 +64,7 @@ class Database {
                 models: [
                     User, Customer, Employee, Token, Branch, Category, Service, MembershipLevel, Appointment,
                     ServiceRequest, ServiceRequestStatusHistory, ServiceRequestImage, Feedback, Order,
-                    OrderDetail, Payment, Skill, EmployeeStatus, EmployeeSkill, ServiceSkill, UserConnection
+                    OrderDetail, Payment, Skill, EmployeeStatus, EmployeeSkill, ServiceSkill,
                 ],
                 dialectOptions: dbConfig.ssl
                     ? {

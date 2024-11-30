@@ -75,7 +75,7 @@ export class EmployeeController {
     public findById = async (req: Request, res: Response) => {
         const id: number = req.params.id as any;
         try {
-            const result = await this.userService.findOne({ id });
+            const result = await this.userService.findById(id);
             if (result instanceof HttpException) {
                 return sendResponse(res, result.status, result.message);
             }

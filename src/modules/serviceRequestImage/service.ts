@@ -13,8 +13,6 @@ export class ServiceRequestImageService {
     // model: Partial<Skill & { note?: string }
 
     public create = async (model: Partial<ServiceRequestImage & {image?: any}>) => {
-        // id, imageUrl, description, status, customerId, employeeId, uploadedAt, isRemoved, serviceRequestStatusHistoryId, createdAt, updatedAt
-        
         // public create = async (model: Partial<ServiceRequestImage & {image?: any, serviceRequestCode?: string}>) => {
         try {
             let nameImage : string = '';

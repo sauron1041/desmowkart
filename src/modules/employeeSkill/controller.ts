@@ -1,15 +1,15 @@
 import { Create } from "dtos/user/create.dto";
-import { EmployeeSkillService } from "./service";
+import { SkillService } from "./service";
 import User from "./model";
 import message from "@core/config/constants";
 import { HttpException } from "@core/exceptions";
 import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
-export class EmployeeSkillController {
-    private categoryService: EmployeeSkillService;
+export class SkillController {
+    private categoryService: SkillService;
     constructor() {
-        this.categoryService = new EmployeeSkillService();
+        this.categoryService = new SkillService();
     }
     public create = async (req: Request, res: Response) => {
         const model: User = req.body as any as User;
@@ -130,21 +130,6 @@ export class EmployeeSkillController {
             return sendResponse(res, 200, message.DELETE_SUCCESS, result);
         } catch (error) {
             return new HttpException(500, message.DELETE_FAILED);
-        }
-    }
-    public getEmployeesForService = async (req: Request, res: Response) => {
-        const serviceId: number = req.query.serviceId as any;
-        const branchId: number = req.query.branchId as any;
-        try {
-            console.log("dat", serviceId, branchId);
-            
-            const result = await this.categoryService.getEmployeesForService(serviceId, branchId);
-            if (result instanceof HttpException) {
-                return sendResponse(res, result.status, result.message);
-            }
-            return sendResponse(res, 200, message.FIND_SUCCESS, result);
-        } catch (error) {
-            return new HttpException(500, message.FIND_FAILED);
         }
     }
 }

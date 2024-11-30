@@ -8,9 +8,6 @@ export interface ISearchAndPagination {
     key?: string;
     page?: number;
     limit?: number;
-    fromDate?: Date;
-    toDate?: Date;
-    byUserId?: number;
 }
 
 import * as express from "express"

@@ -19,6 +19,9 @@ class Appointment extends Model {
     @Column({ type: DataType.DATE, defaultValue: DataType.NOW })
     time!: Date;
 
+    // @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 1 })
+    // status!: number;
+
     @Column({
         type: DataType.INTEGER,
         allowNull: true,

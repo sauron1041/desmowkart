@@ -7,13 +7,11 @@ import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
 export class ServiceRequestController {
-    private categoryService =  new ServiceRequestService();
-    // constructor() {
-        // this.categoryService = new ServiceRequestService();
-    // }
+    private categoryService: ServiceRequestService;
+    constructor() {
+        this.categoryService = new ServiceRequestService();
+    }
     public create = async (req: Request, res: Response) => {
-        console.log("req.id", req.id);
-        
         const model: User = req.body as any as User;
         model.userId = req.id;
         try {
@@ -30,22 +28,22 @@ export class ServiceRequestController {
             return new HttpException(500, message.CREATE_FAILED);
         }
     }
-    // public update = async (req: Request, res: Response) => {
-    //     const model: User = req.body as any as User;
-    //     const id: number = req.params.id as any;
-    //     try {
-    //         const result = await this.categoryService.update(model, id);
-    //         if (result instanceof HttpException && result.field) {
-    //             return sendResponse(res, result.status, result.message, null, result.field);
-    //         }
-    //         if (result instanceof HttpException) {
-    //             return sendResponse(res, result.status, result.message);
-    //         }
-    //         return sendResponse(res, 200, message.UPDATE_SUCCESS, result);
-    //     } catch (error) {
-    //         return new HttpException(500, message.UPDATE_FAILED);
-    //     }
-    // }
+    public update = async (req: Request, res: Response) => {
+        const model: User = req.body as any as User;
+        const id: number = req.params.id as any;
+        try {
+            const result = await this.categoryService.update(model, id);
+            if (result instanceof HttpException && result.field) {
+                return sendResponse(res, result.status, result.message, null, result.field);
+            }
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.UPDATE_SUCCESS, result);
+        } catch (error) {
+            return new HttpException(500, message.UPDATE_FAILED);
+        }
+    }
     public delete = async (req: Request, res: Response) => {
         const id: number = req.params.id as any;
         try {
@@ -65,7 +63,7 @@ export class ServiceRequestController {
         try {
             const model: User = req.query as any as User;
             const search: ISearchAndPagination = req.query as any as ISearchAndPagination;
-            const result = await this.categoryService.findAllUpdate(model, search);
+            const result = await this.categoryService.findAll(model, search);
             if (result instanceof HttpException) {
                 return sendResponse(res, result.status, result.message);
             }
@@ -76,11 +74,8 @@ export class ServiceRequestController {
     }
     public findById = async (req: Request, res: Response) => {
         const id: number = req.params.id as any;
-        const model: Partial<User> = {
-            id: id
-        }
         try {
-            const result = await this.categoryService.findById(model);
+            const result = await this.categoryService.findById(id);
             if (result instanceof HttpException) {
                 return sendResponse(res, result.status, result.message);
             }
@@ -136,20 +131,6 @@ export class ServiceRequestController {
             return sendResponse(res, 200, message.DELETE_SUCCESS, result);
         } catch (error) {
             return new HttpException(500, message.DELETE_FAILED);
-        }
-    }
-    public findAllServiceRequestBegingServed = async (req: Request, res: Response) => {
-        try {
-            const model: User = req.query as any as User;
-            const search: ISearchAndPagination = req.query as any as ISearchAndPagination;
-            search.byUserId = req.id;
-            const result = await this.categoryService.findAllServiceRequestBegingServed(model, search);
-            if (result instanceof HttpException) {
-                return sendResponse(res, result.status, result.message);
-            }
-            return sendResponse(res, 200, message.FIND_ALL_SUCCESS, result);
-        } catch (error) {
-            return new HttpException(500, message.FIND_ALL_FAILED);
         }
     }
 }

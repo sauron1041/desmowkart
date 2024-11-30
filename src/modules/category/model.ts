@@ -1,5 +1,5 @@
 // models/Category.js
-import Service from 'modules/service/model';
+import Service  from 'modules/service/model';
 import { Table, Column, Model, DataType, HasOne } from 'sequelize-typescript';
 
 @Table

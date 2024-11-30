@@ -14,7 +14,6 @@ export class ServiceService {
             if (check) {
                 return new HttpException(400, errorMessages.EXISTED, 'name');
             }
-            model.branchId = 1;
             const result = await Service.create(model);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
@@ -201,16 +200,8 @@ export class ServiceService {
             if(!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
-            const data = await Service.findOne({
-                where: {
-                    id: id
-                },
-                include: [
-                    { model: Category, attributes: ['id', 'name'] },
-                ],
-            })
             return {
-                data: data
+                data: result
             }
         } catch (error) {
             return {

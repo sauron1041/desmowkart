@@ -45,9 +45,6 @@ class OrderDetail extends Model {
 
   @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
   discountType?: number;
-
-  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: 0 })
-  pricePerSession?: number;
 }
 
 export default OrderDetail;

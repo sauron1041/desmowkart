@@ -7,7 +7,6 @@ import ServiceRequestStatusHistory from 'modules/serviceRequestHistory/model';
 import { Table, Column, Model, DataType, ForeignKey, BelongsTo, HasOne, HasMany } from 'sequelize-typescript';
 import ServiceRequestStatus from './interface';
 import { ServiceRequestImage } from 'modules/serviceRequestImage';
-import Employee from 'modules/employee/model';
 
 @Table
 class ServiceRequest extends Model {
@@ -21,8 +20,8 @@ class ServiceRequest extends Model {
   @Column({ type: DataType.INTEGER, allowNull: false })
   appointmentId?: number;
 
-  @Column({ type: DataType.INTEGER, allowNull: true, defaultValue: ServiceRequestStatus.PENDING })
-  currentStatus?: ServiceRequestStatus;
+  @Column({ type: DataType.STRING(255), allowNull: true, defaultValue: ServiceRequestStatus.PENDING })
+  currentStatus?:  ServiceRequestStatus;
 
   @Column({ type: DataType.DATE, allowNull: true, defaultValue: DataType.NOW })
   checkInTime?: Date;
@@ -61,14 +60,6 @@ class ServiceRequest extends Model {
 
   // @HasMany(() => ServiceRequestImage)
   // images?: ServiceRequestImage[];
-
-  @ForeignKey(() => Employee)
-  @Column({ type: DataType.INTEGER, allowNull: true })
-  employeeId?: number;
-
-  @BelongsTo(() => Employee)
-  employee?: Employee;
-
 }
 
 export default ServiceRequest;

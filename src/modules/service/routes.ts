@@ -22,7 +22,7 @@ export class ServiceRoute implements IRoute {
         this.router.delete(this.path + '/delete-list', AuthMiddleware.authorization, this.serviceController.deleteList);
         this.router.delete(this.path + '/:id', AuthMiddleware.authorization, this.serviceController.delete);
         this.router.get(this.path + '/find-one/:id', AuthMiddleware.authorization, this.serviceController.findOne);
-        this.router.get(this.path + '/find-by-id/:id', this.serviceController.findById);
-        this.router.get(this.path + '/', this.serviceController.findAll);
+        this.router.get(this.path + '/find-by-id/:id', AuthMiddleware.authorization, this.serviceController.findById);
+        this.router.get(this.path + '/', AuthMiddleware.authorization, this.serviceController.findAll);
     }
 }

@@ -12,7 +12,6 @@ import Service from "modules/service/model";
 import OrderDetail from "modules/orderDetail/model";
 import { Op } from "sequelize";
 import { calculateTotalAmount } from "./utils/calc";
-import { databaseSequelize } from "@core/config/databaseSequelize";
 export class OrderService {
 
     private orderDetailService = new OrderDetailService();
@@ -256,275 +255,6 @@ export class OrderService {
     //         };
     //     }
     // };
-
-
-
-    // public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
-    //     try {
-    //         let result;
-    //         const { page, limit, key, ...filteredModel } = model as any;
-    //         const searchConditions: any = {
-    //             [Op.and]: [{}, { ...filteredModel }]
-    //         };
-
-    //         if (key) {
-    //             searchConditions[Op.and].push({
-    //                 [Op.or]: [
-    //                     { name: { [Op.like]: `%${key}%` } },
-    //                     { phone: { [Op.like]: `%${key}%` } },
-    //                 ]
-    //             });
-    //         }
-
-    //         const options: any = {
-    //             where: searchConditions,
-    //             order: [['id', 'DESC']],
-    //             include: [
-    //                 {
-    //                     model: OrderDetail,
-    //                     as: 'orderDetails',
-    //                     required: false,
-    //                     attributes: [
-    //                         'id',
-    //                         'orderId',
-    //                         'serviceId',
-    //                         'quantity',
-    //                         'price',
-    //                         'createdAt',
-    //                     ],
-    //                     include: [
-    //                         {
-    //                             model: Service,
-    //                             as: 'service',
-    //                             required: false,
-    //                             attributes: [
-    //                                 'id',
-    //                                 'name',
-    //                             ]
-    //                         }
-    //                     ]
-    //                 }
-    //             ],
-    //         };
-    //         if (search.page && search.limit) {
-    //             const pageNumber = parseInt(search.page.toString(), 10);
-    //             const limitNumber = parseInt(search.limit.toString(), 10);
-    //             const offset = (pageNumber - 1) * limitNumber;
-    //             options.limit = limitNumber;
-    //             options.offset = offset;
-    //         }
-    //         result = await Skill.findAll(options);
-    //         if (result instanceof Error) {
-    //             return new HttpException(400, result.message);
-    //         }
-
-    //         let ordersWithTotal = [];
-    //         // if(result.length > 0) {
-    //         //     ordersWithTotal = result.map((order) => {
-    //         //         const orderData = order.get({ plain: true });
-    //         //         const totalAmount = calculateTotalAmount(orderData.orderDetails);
-    //         //         return {
-    //         //             ...orderData,
-    //         //             totalAmount
-    //         //         };
-    //         //     });
-    //         // }
-    //         if (result.length > 0) {
-    //             ordersWithTotal = result.map((order) => {
-    //                 // const orderDetail = order.get({ plain: true }).orderDetails;
-
-    //                 //tinh tong tien trong order detail xong moi tinh ben ngoai order
-    //                 const orderDetailHanle = order.get({ plain: true }).orderDetails;
-    //                 // let totalAmount = 0;
-    //                 // orderDetailHanle.forEach((orderDetail: any) => {
-    //                 //     totalAmount += orderDetail.price * orderDetail.quantity;
-
-    //                 //     return {
-    //                 //         ...orderDetail,
-    //                 //         totalAmount
-    //                 //     }
-    //                 // });
-    //                 // const orderMap = orderDetailHanle.map((orderDetail: any) => {
-    //                 //     totalAmount += orderDetail.price * orderDetail.quantity;
-
-    //                 //     console.log("orderDetail", orderDetail);
-
-    //                 //     return {
-    //                 //         ...orderDetail,
-    //                 //         totalAmount
-    //                 //     }
-    //                 // })
-    //                 // return {
-    //                 //     // ...order.get({ plain: true }),
-    //                 //     ...order.get({ plain: true }),
-    //                 //     orderDetails: orderMap,
-    //                 //     totalAmount
-    //                 // };
-
-    //                 // const orderMap = orderDetailHanle.map((orderDetail: any) => {
-    //                 //     // Tính tổng cho từng chi tiết đơn hàng (orderDetail)
-    //                 //     const itemTotalAmount = orderDetail.price * orderDetail.quantity;
-
-    //                 //     console.log("orderDetail", orderDetail);
-
-    //                 //     return {
-    //                 //         ...orderDetail,
-    //                 //         totalAmount: itemTotalAmount
-    //                 //     };
-    //                 // });
-
-    //                 const orderMap = orderDetailHanle.map((orderDetail: any) => {
-    //                     const itemTotalAmount = orderDetail.price * orderDetail.quantity;
-
-    //                     return {
-    //                         ...orderDetail,
-    //                         serviceName: orderDetail.service.name, // Thêm serviceName từ service
-    //                         totalAmount: itemTotalAmount,
-    //                         service: undefined // Xóa đối tượng service
-    //                     };
-    //                 });
-
-    //                 // Tính tổng của tất cả các chi tiết đơn hàng
-    //                 const totalAmount = orderMap.reduce((acc: any, item: any) => acc + item.totalAmount, 0);
-
-    //                 return {
-    //                     ...order.get({ plain: true }),
-    //                     orderDetails: orderMap,
-    //                     totalAmount
-    //                 };
-
-
-    //             })
-    //         }
-    //         return {
-    //             data: ordersWithTotal,
-    //             pagination: search.page && search.limit ? {
-    //                 page: Number(search.page),
-    //                 limit: Number(search.limit),
-    //                 totalRecords: result.length
-    //             } : null
-    //         };
-    //     } catch (error) {
-    //         return {
-    //             error: error
-    //         };
-    //     }
-    // };
-
-    // public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
-    //     try {
-    //         let result;
-    //         const { page, limit, key, ...filteredModel } = model as any;
-    //         const searchConditions: any = {
-    //             [Op.and]: [{}, { ...filteredModel }]
-    //         };
-
-    //         if (key) {
-    //             searchConditions[Op.and].push({
-    //                 [Op.or]: [
-    //                     { name: { [Op.like]: `%${key}%` } },
-    //                     { phone: { [Op.like]: `%${key}%` } },
-    //                 ]
-    //             });
-    //         }
-
-    //         const options: any = {
-    //             where: searchConditions,
-    //             order: [['id', 'DESC']],
-    //             include: [
-    //                 {
-    //                     model: OrderDetail,
-    //                     as: 'orderDetails',
-    //                     required: false,
-    //                     attributes: [
-    //                         'id',
-    //                         'orderId',
-    //                         'serviceId',
-    //                         'quantity',
-    //                         'price',
-    //                         'createdAt',
-    //                     ],
-    //                     include: [
-    //                         {
-    //                             model: Service,
-    //                             as: 'service',
-    //                             required: false,
-    //                             attributes: [
-    //                                 'id',
-    //                                 'name',
-    //                                 'pricePerSession' // Đảm bảo thêm pricePerSession vào attributes
-    //                             ]
-    //                         }
-    //                     ]
-    //                 }
-    //             ],
-    //         };
-
-    //         if (search.page && search.limit) {
-    //             const pageNumber = parseInt(search.page.toString(), 10);
-    //             const limitNumber = parseInt(search.limit.toString(), 10);
-    //             const offset = (pageNumber - 1) * limitNumber;
-    //             options.limit = limitNumber;
-    //             options.offset = offset;
-    //         }
-
-    //         result = await Skill.findAll(options);
-    //         if (result instanceof Error) {
-    //             return new HttpException(400, result.message);
-    //         }
-
-    //         let ordersWithTotal = [];
-    //         if (result.length > 0) {
-    //             ordersWithTotal = result.map((order) => {
-    //                 // Lấy các chi tiết đơn hàng (orderDetails)
-    //                 const orderDetailHandle = order.get({ plain: true }).orderDetails;
-
-    //                 // Xử lý từng orderDetail để tính tổng tiền theo yêu cầu
-    //                 const orderMap = orderDetailHandle.map((orderDetail: any) => {
-    //                     // Tính giá sử dụng dựa trên điều kiện quantity
-    //                     const priceToUse = orderDetail.quantity == 1000 || orderDetail.quantity > 10000
-    //                         ? orderDetail.price
-    //                         : orderDetail.service.pricePerSession;
-
-    //                     // Tính tổng tiền cho chi tiết đơn hàng
-    //                     const itemTotalAmount = priceToUse * orderDetail.quantity;
-
-    //                     return {
-    //                         ...orderDetail,
-    //                         serviceName: orderDetail.service.name, // Thêm tên dịch vụ
-    //                         totalAmount: itemTotalAmount,         // Tổng tiền của chi tiết
-    //                         service: undefined                   // Loại bỏ trường không cần thiết
-    //                     };
-    //                 });
-
-    //                 // Tính tổng tiền của toàn bộ đơn hàng
-    //                 const totalAmount = orderMap.reduce((acc: any, item: any) => acc + item.totalAmount, 0);
-
-    //                 return {
-    //                     ...order.get({ plain: true }),
-    //                     orderDetails: orderMap,
-    //                     totalAmount
-    //                 };
-    //             });
-    //         }
-
-    //         return {
-    //             data: ordersWithTotal,
-    //             pagination: search.page && search.limit
-    //                 ? {
-    //                     page: Number(search.page),
-    //                     limit: Number(search.limit),
-    //                     totalRecords: result.length
-    //                 }
-    //                 : null
-    //         };
-    //     } catch (error) {
-    //         return {
-    //             error: error
-    //         };
-    //     }
-    // };
-
     public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
         try {
             let result;
@@ -557,12 +287,21 @@ export class OrderService {
                             'quantity',
                             'price',
                             'createdAt',
-                            'pricePerSession' // Thêm pricePerSession vào thuộc tính của OrderDetail
+                        ],
+                        include: [
+                            {
+                                model: Service,
+                                as: 'service',
+                                required: false,
+                                attributes: [
+                                    'id',
+                                    'name',
+                                ]
+                            }
                         ]
                     }
                 ],
             };
-
             if (search.page && search.limit) {
                 const pageNumber = parseInt(search.page.toString(), 10);
                 const limitNumber = parseInt(search.limit.toString(), 10);
@@ -570,35 +309,78 @@ export class OrderService {
                 options.limit = limitNumber;
                 options.offset = offset;
             }
-
             result = await Skill.findAll(options);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
 
             let ordersWithTotal = [];
+            // if(result.length > 0) {
+            //     ordersWithTotal = result.map((order) => {
+            //         const orderData = order.get({ plain: true });
+            //         const totalAmount = calculateTotalAmount(orderData.orderDetails);
+            //         return {
+            //             ...orderData,
+            //             totalAmount
+            //         };
+            //     });
+            // }
             if (result.length > 0) {
                 ordersWithTotal = result.map((order) => {
-                    const orderDetailHandle = order.get({ plain: true }).orderDetails;
+                    // const orderDetail = order.get({ plain: true }).orderDetails;
 
-                    const orderMap = orderDetailHandle.map((orderDetail: any) => {
-                        // Sử dụng pricePerSession trực tiếp từ OrderDetail
-                        const priceToUse = orderDetail.quantity >= 1000
-                            ? orderDetail.price // Nếu quantity >= 1000, sử dụng price từ OrderDetail
-                            : orderDetail.pricePerSession; // Nếu không, sử dụng pricePerSession từ OrderDetail
+                    //tinh tong tien trong order detail xong moi tinh ben ngoai order
+                    const orderDetailHanle = order.get({ plain: true }).orderDetails;
+                    // let totalAmount = 0;
+                    // orderDetailHanle.forEach((orderDetail: any) => {
+                    //     totalAmount += orderDetail.price * orderDetail.quantity;
 
-                        // Tính tổng tiền cho chi tiết đơn hàng
-                        // let itemTotalAmount = priceToUse * orderDetail.quantity;
-                        let itemTotalAmount = orderDetail.quantity >= 1000 ? priceToUse : priceToUse * orderDetail.quantity;
+                    //     return {
+                    //         ...orderDetail,
+                    //         totalAmount
+                    //     }
+                    // });
+                    // const orderMap = orderDetailHanle.map((orderDetail: any) => {
+                    //     totalAmount += orderDetail.price * orderDetail.quantity;
+
+                    //     console.log("orderDetail", orderDetail);
+
+                    //     return {
+                    //         ...orderDetail,
+                    //         totalAmount
+                    //     }
+                    // })
+                    // return {
+                    //     // ...order.get({ plain: true }),
+                    //     ...order.get({ plain: true }),
+                    //     orderDetails: orderMap,
+                    //     totalAmount
+                    // };
+
+                    // const orderMap = orderDetailHanle.map((orderDetail: any) => {
+                    //     // Tính tổng cho từng chi tiết đơn hàng (orderDetail)
+                    //     const itemTotalAmount = orderDetail.price * orderDetail.quantity;
+
+                    //     console.log("orderDetail", orderDetail);
+
+                    //     return {
+                    //         ...orderDetail,
+                    //         totalAmount: itemTotalAmount
+                    //     };
+                    // });
+
+                    const orderMap = orderDetailHanle.map((orderDetail: any) => {
+                        const itemTotalAmount = orderDetail.price * orderDetail.quantity;
 
                         return {
                             ...orderDetail,
-                            serviceName: orderDetail.serviceName, // Thêm tên dịch vụ
-                            totalAmount: itemTotalAmount,           // Tổng tiền cho chi tiết đơn hàng
+                            serviceName: orderDetail.service.name, // Thêm serviceName từ service
+                            totalAmount: itemTotalAmount,
+                            service: undefined // Xóa đối tượng service
                         };
                     });
 
-                    // Tính tổng tiền cho toàn bộ đơn hàng
+                    // Tính tổng của tất cả các chi tiết đơn hàng
                     const totalAmount = orderMap.reduce((acc: any, item: any) => acc + item.totalAmount, 0);
 
                     return {
@@ -606,18 +388,17 @@ export class OrderService {
                         orderDetails: orderMap,
                         totalAmount
                     };
-                });
-            }
 
+
+                })
+            }
             return {
                 data: ordersWithTotal,
-                pagination: search.page && search.limit
-                    ? {
-                        page: Number(search.page),
-                        limit: Number(search.limit),
-                        totalRecords: result.length
-                    }
-                    : null
+                pagination: search.page && search.limit ? {
+                    page: Number(search.page),
+                    limit: Number(search.limit),
+                    totalRecords: result.length
+                } : null
             };
         } catch (error) {
             return {
@@ -625,9 +406,6 @@ export class OrderService {
             };
         }
     };
-
-
-
     public findOne = async (model: Partial<Skill>) => {
         try {
             const result = await Skill.findOne({
@@ -694,86 +472,11 @@ export class OrderService {
     //         }
     //     }
     // }
-
-
-
-    // public findById = async (model: Partial<Skill>) => {
-    //     console.log("model", model);
-
-    //     try {
-
-    //         const options: any = {
-    //             include: [
-    //                 {
-    //                     model: OrderDetail,
-    //                     as: 'orderDetails',
-    //                     required: false,
-    //                     attributes: [
-    //                         'id',
-    //                         'orderId',
-    //                         'serviceId',
-    //                         'quantity',
-    //                         'price',
-    //                         'createdAt',
-    //                     ],
-    //                     include: [
-    //                         {
-    //                             model: Service,
-    //                             as: 'service',
-    //                             required: false,
-    //                             attributes: [
-    //                                 'id',
-    //                                 'name',
-    //                             ]
-    //                         }
-    //                     ]
-    //                 }
-    //             ],
-    //         };
-
-    //         const result = await Skill.findOne({
-    //             where: model,
-    //             ...options
-    //         })
-
-    //         if (!result) {
-    //             return new HttpException(404, errorMessages.NOT_FOUND, 'id');
-    //         }
-
-    //         const resultData = result.get({ plain: true });
-    //         const orderMap = resultData.orderDetails?.map((orderDetail: any) => {
-    //             const itemTotalAmount = orderDetail.price * orderDetail.quantity;
-
-    //             return {
-    //                 ...orderDetail,
-    //                 serviceName: orderDetail.service?.name, // Thêm serviceName từ service
-    //                 totalAmount: itemTotalAmount,
-    //                 service: undefined // Xóa đối tượng service
-    //             };
-    //         }) || [];
-
-    //         // Tính tổng của tất cả các chi tiết đơn hàng
-    //         const totalAmount = orderMap.reduce((acc: number, item: any) => acc + item.totalAmount, 0);
-
-    //         return {
-    //             ...resultData,
-    //             orderDetails: orderMap,
-    //             totalAmount
-    //         };
-
-
-    //     } catch (error) {
-    //         return {
-    //             error: error
-    //         };
-    //     }
-    // };
-
-
     public findById = async (model: Partial<Skill>) => {
         console.log("model", model);
-
+        
         try {
+
             const options: any = {
                 include: [
                     {
@@ -787,7 +490,17 @@ export class OrderService {
                             'quantity',
                             'price',
                             'createdAt',
-                            'pricePerSession' // Thêm pricePerSession vào OrderDetail
+                        ],
+                        include: [
+                            {
+                                model: Service,
+                                as: 'service',
+                                required: false,
+                                attributes: [
+                                    'id',
+                                    'name',
+                                ]
+                            }
                         ]
                     }
                 ],
@@ -796,7 +509,7 @@ export class OrderService {
             const result = await Skill.findOne({
                 where: model,
                 ...options
-            });
+            })
 
             if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
@@ -804,13 +517,8 @@ export class OrderService {
 
             const resultData = result.get({ plain: true });
             const orderMap = resultData.orderDetails?.map((orderDetail: any) => {
-                // Tính toán giá sử dụng pricePerSession từ OrderDetail
-                const priceToUse = orderDetail.quantity >= 1000
-                    ? orderDetail.price // Nếu quantity >= 1000, sử dụng price từ OrderDetail
-                    : orderDetail.pricePerSession; // Nếu không, sử dụng pricePerSession từ OrderDetail
-
-                const itemTotalAmount = priceToUse * orderDetail.quantity;
-
+                const itemTotalAmount = orderDetail.price * orderDetail.quantity;
+    
                 return {
                     ...orderDetail,
                     serviceName: orderDetail.service?.name, // Thêm serviceName từ service
@@ -818,22 +526,23 @@ export class OrderService {
                     service: undefined // Xóa đối tượng service
                 };
             }) || [];
-
+    
             // Tính tổng của tất cả các chi tiết đơn hàng
             const totalAmount = orderMap.reduce((acc: number, item: any) => acc + item.totalAmount, 0);
-
+    
             return {
                 ...resultData,
                 orderDetails: orderMap,
                 totalAmount
             };
+    
+
         } catch (error) {
             return {
                 error: error
             };
         }
     };
-
 
     public deleteList = async (ids: number[]) => {
         try {
@@ -881,37 +590,6 @@ export class OrderService {
             return {
                 data: result
             }
-        } catch (error) {
-            return {
-                error: error
-            }
-        }
-    }
-    public countTotalPurchased = async (customerId: number, serviceId: number) => {
-        let quantity = 0;
-        let query = `SELECT 
-                CAST(SUM(od.quantity) AS UNSIGNED) AS totalPurchasedQuantity
-                FROM 
-                    OrderDetails od
-                JOIN 
-                    Orders o ON od.orderId = o.id
-                WHERE 
-                    od.serviceId = ${serviceId}
-                    AND o.customerId = ${customerId}
-                    AND o.isRemoved = false;
-                `
-        try {
-            const result = await databaseSequelize.getSequelize().query(query, {})
-            if (result instanceof Error) {
-                return new HttpException(400, result.message);
-            }
-            // if ((result as RowDataPacket)[0][0].totalPurchased) {
-            //     quantity = (result as RowDataPacket)[0][0].totalPurchased;
-            // }
-            return {
-                data: (result as RowDataPacket)[0][0]
-            }
-
         } catch (error) {
             return {
                 error: error

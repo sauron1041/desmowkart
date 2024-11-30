@@ -21,9 +21,9 @@ class ServiceRequestStatusHistory extends Model {
   // status?: number;
 
   @Column({
-    type: DataType.INTEGER, // Sử dụng STRING cho trạng thái
+    type: DataType.STRING, // Sử dụng STRING cho trạng thái
     allowNull: true,
-    // defaultValue: constantStatus.CHECKED_IN, // Sử dụng enum ở đây
+    defaultValue: constantStatus.CHECKED_IN, // Sử dụng enum ở đây
   })
   status?: number;
 

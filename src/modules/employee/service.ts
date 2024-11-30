@@ -8,8 +8,6 @@ import { generateCodePrefixChar } from "@core/utils/gennerate.code";
 import User from "modules/user/model";
 import { EmployeeStatusService } from "modules/employeeStatus/service";
 import EmployeeStatusModel from "modules/employeeStatus/model";
-import Branch from "modules/branch/model";
-import EmployeeSkill from "modules/employeeSkill/model";
 export class EmployeeService {
     private employeeStatusService = new EmployeeStatusService();
 
@@ -17,7 +15,7 @@ export class EmployeeService {
         try {
             const code = await generateCodePrefixChar('Employees', 'NV', 8);
             model.code = code;
-            // model.id = undefined;
+            model.id = undefined;
             const result = await Employee.create(model);
             console.log(result);
             if (result instanceof Error) {
@@ -100,13 +98,6 @@ export class EmployeeService {
             const options: any = {
                 where: searchConditions,
                 order: [['id', 'DESC']],
-                include: [
-                    {
-                        model: Branch,
-                        as: 'branch',
-                        attributes: ['id', 'name']
-                    },
-                ],
             }
 
             if (search.page && search.limit) {
@@ -127,6 +118,7 @@ export class EmployeeService {
             //     });
             // }
             result = await Employee.findAll(options);
+
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
@@ -178,24 +170,10 @@ export class EmployeeService {
     public findOne = async (model: Partial<Employee>) => {
         try {
             const result = await Employee.findOne({
-                where: {
-                    ...model,
-                    isRemoved: false,
-                },
-                include: [
-                    {
-                        model: EmployeeSkill,
-                        as: 'employeeSkill',
-                    },
-                ],
+                where: model
             });
-            console.log("result", result);
-
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
-            }
-            return {
-                data: result
             }
         } catch (error) {
             return {
@@ -240,12 +218,10 @@ export class EmployeeService {
     public findById = async (id: number) => {
         try {
             const result = await checkExistSequelize(Employee, 'id', id);
-            console.log("result", result);
-
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if (!result) {
+            if(!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
@@ -277,17 +253,15 @@ export class EmployeeService {
     }
     public findAllEmployeeWithWorkingStatus = async (status: number, branchId: number) => {
         let modelEmployeeStatus: EmployeeStatusModel = new EmployeeStatusModel();
-        modelEmployeeStatus.employeeStatus = status as number;
-        modelEmployeeStatus.branchId = branchId as number;
+        modelEmployeeStatus.employeeStatus = status;
+        modelEmployeeStatus.branchId = branchId;
 
         console.log("modelEmployeeStatus", modelEmployeeStatus);
         console.log("this.employeeStatusService", branchId);
+        
 
-        // const result = await this.employeeStatusService.findAll(modelEmployeeStatus, {});
-        // const result = await this.employeeStatusService.getListEmployeeIdByStatus(modelEmployeeStatus);
-        const result = await this.employeeStatusService.getListEmployeeIdByStatus(branchId, status);
-        console.log("result", result);
-
+        
+        const result = await this.employeeStatusService.findAll(modelEmployeeStatus, {});
         if (result instanceof HttpException) {
             return new HttpException(400, errorMessages.NOT_FOUND);
         }
