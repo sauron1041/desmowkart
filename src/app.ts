@@ -121,16 +121,14 @@ class App {
     public app: express.Application;
     public server: http.Server;
     public io: Server;
-    // private connectedEmployees: Record<string, string> = {};
-    // private userConnection: Record<string, string> = {};
-    // private customerConnection: Record<string, string> = {};
+
     private queue = new HandleQueue
     private socketService = SocketService.getInstance();
-    public port: number | string
+    public port: number
 
     constructor(routes?: IRoute[]) {
+        this.port = process.env.PORT as any as number;
         this.app = express();
-        this.port = process.env.PORT || 3001;
         this.eventEmitter();
         this.server = http.createServer(this.app);  // Ensure you create the HTTP server
         this.initialMiddlewares();
