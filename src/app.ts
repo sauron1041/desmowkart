@@ -516,11 +516,11 @@ class App {
     }
 
     public listen() {
-        this.server.listen(this.port, () => {
+        this.app.listen(this.port, () => {
             console.log(`Server is running on port ${this.port}`);
         });
     }
-        private async initialRoutes(routes: IRoute[]) {
+    private async initialRoutes(routes: IRoute[]) {
         // routes.forEach(route => {
         //     this.app.use(process.env.API_VERSION!, route.router, this.getConfig)
         // })
