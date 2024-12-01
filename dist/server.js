@@ -5,6 +5,8 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
 Object.defineProperty(exports, "__esModule", { value: true });
 require('module-alias/register');
 require('dotenv').config();
+const port = process.env.PORT || 3001;
+console.log("port111111", port);
 const app_1 = __importDefault(require("./app"));
 require("reflect-metadata");
 const user_1 = require("modules/user");
@@ -47,6 +49,5 @@ const routes = [
     new order_1.OrderRoute(),
     new orderDetail_1.OrderDetailRoute(),
 ];
-const app = new app_1.default(routes);
-app.listen();
+const app = new app_1.default(routes, port).listen();
 //# sourceMappingURL=server.js.map

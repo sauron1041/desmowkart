@@ -119,13 +119,14 @@ const pubSub_1 = __importDefault(require("@core/pubSub/pubSub"));
 const service_1 = require("modules/queue/service");
 const service_2 = __importDefault(require("modules/socket/service"));
 class App {
-    constructor(routes) {
+    constructor(routes, port) {
         // private connectedEmployees: Record<string, string> = {};
         // private userConnection: Record<string, string> = {};
         // private customerConnection: Record<string, string> = {};
         this.queue = new service_1.HandleQueue;
         this.socketService = service_2.default.getInstance();
         this.app = (0, express_1.default)();
+        this.port = port;
         this.eventEmitter();
         this.server = http_1.default.createServer(this.app); // Ensure you create the HTTP server
         this.initialMiddlewares();
@@ -141,6 +142,11 @@ class App {
         routes ? this.initialRoutes(routes) : '';
         this.connectMySql();
         this.handleQueue();
+    }
+    envConfig() {
+        const env = process.env.NODE_ENV || 'development';
+        require('dotenv').config({ path: path_1.default.resolve(`.env_${env}`) });
+        return env;
     }
     // Setup Socket.IO connection
     setUpSocketIo() {
@@ -189,7 +195,7 @@ class App {
     }
     // Start the express server
     listen() {
-        this.server.listen(process.env.PORT || 10000, () => {
+        this.server.listen(Number(process.env.PORT) || 10000, '0.0.0.0', () => {
             console.log(`Server is running on port ${process.env.PORT || 10000}`);
         });
     }
