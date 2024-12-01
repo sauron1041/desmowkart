@@ -125,9 +125,13 @@ class App {
     // private customerConnection: Record<string, string> = {};
     private queue = new HandleQueue
     private socketService = SocketService.getInstance();
+    public port: number | string;
+    public environment: string = process.env.NODE_ENV || 'development';
 
     constructor(routes?: IRoute[]) {
+        this.environment = this.envConfig();
         this.app = express();
+        this.port = process.env.PORT || 3001;
         this.eventEmitter();
         this.server = http.createServer(this.app);  // Ensure you create the HTTP server
         this.initialMiddlewares();
@@ -144,7 +148,11 @@ class App {
         this.connectMySql();
         this.handleQueue();
     }
-
+    private envConfig() {
+        const env = process.env.NODE_ENV || 'development';
+        require('dotenv').config({ path: path.resolve(`.env_${env}`) });
+        return env;
+    }
     // Setup Socket.IO connection
     private setUpSocketIo() {
 
@@ -201,8 +209,8 @@ class App {
 
     // Start the express server
     public listen() {
-        this.server.listen(10000, () => {
-            console.log(`Server is running on port ${10000}`);
+        this.server.listen(process.env.PORT || 10000, () => {
+            console.log(`Server is running on port ${process.env.PORT || 10000}`);
         });
     }
     private async initialRoutes(routes: IRoute[]) {
