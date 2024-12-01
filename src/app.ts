@@ -126,10 +126,8 @@ class App {
     private queue = new HandleQueue
     private socketService = SocketService.getInstance();
     public port: number | string;
-    public environment: string = process.env.NODE_ENV || 'development';
 
     constructor(routes?: IRoute[]) {
-        this.environment = this.envConfig();
         this.app = express();
         this.port = process.env.PORT || 3001;
         this.eventEmitter();
