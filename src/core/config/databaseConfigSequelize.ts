@@ -44,18 +44,18 @@ class Database {
                 idle: 10000,
             },
             logging: console.log,
-            dialectOptions: dbConfig.ssl
-                ? {
-                      ssl: {
-                          require: true,
-                          rejectUnauthorized: false,
-                          ca: fs.readFileSync(path.resolve(__dirname, "../../../ca.pem")),
-                      },
-                      connectTimeout: 60000,
-                  }
-                : {
-                      connectTimeout: 60000,
-                  },
+            // dialectOptions: dbConfig.ssl
+            //     ? {
+            //           ssl: {
+            //               require: true,
+            //               rejectUnauthorized: false,
+            //               ca: fs.readFileSync(path.resolve(__dirname, "../../../ca.pem")),
+            //           },
+            //           connectTimeout: 60000,
+            //       }
+            //     : {
+            //           connectTimeout: 60000,
+            //       },
         });
     }
 

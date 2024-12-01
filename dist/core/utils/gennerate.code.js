@@ -16,7 +16,9 @@ exports.generateCode = generateCode;
 exports.generateCodeRandom = generateCodeRandom;
 exports.gennerateCodeRandomWithPrefix = gennerateCodeRandomWithPrefix;
 exports.generateCodeWithPrefix = generateCodeWithPrefix;
+exports.generateCodePrefixChar = generateCodePrefixChar;
 const database_1 = __importDefault(require("@core/config/database"));
+const databaseConfigSequelize_1 = __importDefault(require("@core/config/databaseConfigSequelize"));
 function generateCode(type, length) {
     return __awaiter(this, void 0, void 0, function* () {
         let key = '';
@@ -31,7 +33,7 @@ function generateCode(type, length) {
         }
         const lastRow = yield database_1.default.executeQuery(`SELECT id, code FROM ${key} ORDER BY id DESC LIMIT 1`);
         let codeNumber = '';
-        if (Array.isArray(lastRow) && lastRow.length == 0) {
+        if (Array.isArray(lastRow) && lastRow.length === 0) {
             codeNumber = '1'.padStart(length - pre.length, '0');
             return pre + codeNumber;
         }
@@ -76,13 +78,33 @@ function generateCodeWithPrefix(tableName, prefix, length) {
         const query = `select * from ${tableName} where \`code\` like '${prefix}%' and \`code\` regexp '[0-9]$' order by \`code\` desc limit 1`;
         const lastRow = yield database_1.default.executeQuery(query);
         ;
-        if (Array.isArray(lastRow) && lastRow.length == 0) {
+        if (Array.isArray(lastRow) && lastRow.length === 0) {
             result = prefix + '1'.padStart(length - prefix.length, '0');
             return result;
         }
         if (Array.isArray(lastRow) && lastRow.length > 0) {
             const lastCode = lastRow[0].code;
             const codeNumber = lastCode.substring(prefix.length);
+            result = prefix + (parseInt(codeNumber, 10) + 1).toString().padStart(length - prefix.length, '0');
+        }
+        return result;
+    });
+}
+function generateCodePrefixChar(tableName, prefix, length) {
+    return __awaiter(this, void 0, void 0, function* () {
+        let key = '';
+        let result = '';
+        const query = `select * from ${tableName} where \`code\` regexp '^${prefix}[0-9]{${length - prefix.length}}$'  order by \`code\` desc limit 1`;
+        const lastRow = yield databaseConfigSequelize_1.default.executeQuery(query);
+        // const lastRow = await databaseSequelize.getSequelize().query(query, { type: databaseSequelize.QueryTypes.SELECT });
+        if (Array.isArray(lastRow) && lastRow.length == 0) {
+            result = prefix + '1'.padStart(length - prefix.length, '0');
+            return result;
+        }
+        if (Array.isArray(lastRow) && lastRow.length > 0) {
+            const lastCode = lastRow[0].code;
+            let codeNumber = lastCode.substring(prefix.length);
+            codeNumber = codeNumber.replace(/\D/g, '');
             result = prefix + (parseInt(codeNumber, 10) + 1).toString().padStart(length - prefix.length, '0');
         }
         return result;

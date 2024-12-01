@@ -7,6 +7,7 @@ import { Op } from 'sequelize';
 import ServiceRequestStatus from "modules/serviceRequest/interface";
 import { ServiceRequestImageService } from "modules/serviceRequestImage/service";
 import ServiceRequestImages from "modules/serviceRequestImage/model";
+import ServiceRequestStatusHistoryDto from "./dtos/create";
 
 export class ServiceRequestHistoryService {
     private serviceRequestImageService = new ServiceRequestImageService();
@@ -22,10 +23,46 @@ export class ServiceRequestHistoryService {
             // }
             model.status != undefined ? model.status = model.status : model.status = ServiceRequestStatus.PENDING;
             const result = await ServiceRequestHistory.create(model);
-            
+
             console.log(result);
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
+            }
+
+            if (model.serviceRequestImages != undefined) {
+                for (const image of model.serviceRequestImages) {
+                    image.serviceRequestStatusHistoryId = result.id;
+                    image.employeeId = model.userId;
+                    await this.serviceRequestImageService.create(image);
+                }
+            }
+            return {
+                data: result
+            }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+    public createUpdate = async (model: Partial<ServiceRequestStatusHistoryDto>) => {
+        console.log("model servie history", model);
+
+        try {
+            model.status != undefined ? model.status = model.status : model.status = ServiceRequestStatus.PENDING;
+            // id, status, note, userId, createdAt, updatedAt, isRemoved, serviceRequestId
+            const result = await ServiceRequestHistory.create(model);
+
+            console.log(result);
+            if (result instanceof Error) {
+                return new HttpException(400, result.message);
+            }
+            if (model.serviceRequestImages != undefined) {
+                for (const image of model.serviceRequestImages) {
+                    image.serviceRequestStatusHistoryId = result.id;
+                    image.employeeId = model.userId;
+                    await this.serviceRequestImageService.createUpdate(image);
+                }
             }
             return {
                 data: result
@@ -190,7 +227,7 @@ export class ServiceRequestHistoryService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {

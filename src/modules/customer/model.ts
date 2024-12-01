@@ -8,9 +8,8 @@ import { Table, Column, DataType, ForeignKey, Model, BelongsTo, HasMany, HasOne 
 @Table
 // @Table({ tableName: 'customer' })
 export class Customer extends Model {
-    @Column({ type: DataType.INTEGER, autoIncrement: true, primaryKey: true })
+    @Column({ type: DataType.INTEGER, primaryKey: true, allowNull: false })
     id?: number;
-
     // @Column({ type: DataType.STRING(100), allowNull: true, defaultValue: '' })
     // name?: string;
 
@@ -65,6 +64,21 @@ export class Customer extends Model {
   
     @Column({ type: DataType.STRING(255), allowNull: true })
     ward?: string;
+
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    name?: string;
+
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    email?: string;
+
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    phone?: string;
+
+    @Column({ type: DataType.STRING(255), allowNull: true })
+    gender?: number
+
+    @Column({ type: DataType.DATE, allowNull: true })   
+    dateOfBirth?: Date;
 }
 
 export default Customer;

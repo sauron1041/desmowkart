@@ -1,5 +1,5 @@
 import { Create } from "dtos/user/create.dto";
-import { SkillService } from "./service";
+import { PaymentService } from "./service";
 import User from "./model";
 import message from "@core/config/constants";
 import { HttpException } from "@core/exceptions";
@@ -7,9 +7,9 @@ import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
 export class SkillController {
-    private categoryService: SkillService;
+    private categoryService: PaymentService;
     constructor() {
-        this.categoryService = new SkillService();
+        this.categoryService = new PaymentService();
     }
     public create = async (req: Request, res: Response) => {
         const model: User = req.body as any as User;

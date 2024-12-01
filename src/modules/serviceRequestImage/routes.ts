@@ -15,6 +15,7 @@ export class ServiceRequestImageRoute implements IRoute {
         this.initializeRoutes();
     }
     private initializeRoutes() {
+        this.router.post(this.path + '/upload-image', AuthMiddleware.authorization, this.upload.single('file'), this.skillController.uploadImage);
         this.router.post(this.path + '/', AuthMiddleware.authorization, this.upload.single('file'), this.skillController.create);
         this.router.patch(this.path + '/:id', AuthMiddleware.authorization, this.skillController.update);
         this.router.put(this.path + '/update-list-status', AuthMiddleware.authorization, this.skillController.updateListStatus);

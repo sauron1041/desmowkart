@@ -6,6 +6,7 @@ import { HttpException } from "@core/exceptions";
 import { sendResponse } from "@core/utils";
 import { Request, Response } from "express";
 import { ISearchAndPagination } from "@core/types/express";
+import ServiceRequestImageDto from "./dtos/create";
 export class ServiceRequestImageController {
     private categoryService: ServiceRequestImageService;
     constructor() {
@@ -161,6 +162,25 @@ export class ServiceRequestImageController {
             return sendResponse(res, 200, message.FIND_ALL_SUCCESS, result);
         } catch (error) {
             return new HttpException(500, message.FIND_ALL_FAILED);
+        }
+    }
+    public uploadImage = async (req: Request, res: Response) => {
+        const id: number = req.params.id as any;
+        let image: any = req.file  as any;
+        const model : ServiceRequestImageDto = req.body as any as ServiceRequestImageDto;
+        model.id = id;
+        model.imageFile = image;
+        try {
+            const result = await this.categoryService.uploadImage(model);
+            if (result instanceof HttpException && result.field) {
+                return sendResponse(res, result.status, result.message, null, result.field);
+            }
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.UPDATE_SUCCESS, result);
+        } catch (error) {
+            return new HttpException(500, message.UPDATE_FAILED);
         }
     }
 }

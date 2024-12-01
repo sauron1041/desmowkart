@@ -1,3 +1,3 @@
-import { SkillRoute } from "./routes";
+import { EmployeeSkillRoute } from "./routes";
 import Skill from "./model";
-export { SkillRoute, Skill };
+export { EmployeeSkillRoute, Skill };

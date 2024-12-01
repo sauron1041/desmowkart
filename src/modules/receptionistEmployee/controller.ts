@@ -137,6 +137,8 @@ export class EmployeeController {
     public appointmentApproval = async (req: Request, res: Response) => {
         const id: number = req.params.id as any;
         const status: AppointmentStatus = req.body.status as any;
+        console.log("statw113212us", status);
+        
         try {
             const result = await this.userService.appointmentApproval(id, status);
             if (result instanceof HttpException) {

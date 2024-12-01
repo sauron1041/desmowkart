@@ -72,9 +72,68 @@ export class EmployeeStatusService {
             }
         }
     }
+
+    // public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
+    //     console.log("model", model);
+    //     model.employeeStatus as number;
+    //     model.branchId as number;
+    //     try {
+    //         let result;
+    //         const { page, limit, key, ...filteredModel } = model as any;
+    //         const searchConditions: any = {
+    //             [Op.and]: [{}, { ...filteredModel }]
+    //         };
+
+    //         if (key) {
+    //             searchConditions[Op.and].push({
+    //                 [Op.or]: [
+    //                     { name: { [Op.like]: `%${key}%` } },
+    //                     { phone: { [Op.like]: `%${key}%` } },
+    //                 ]
+    //             });
+    //         }
+
+    //         if (search.page && search.limit) {
+    //             const pageNumber = parseInt(search.page.toString(), 10);
+    //             const limitNumber = parseInt(search.limit.toString(), 10);
+    //             const offset = (pageNumber - 1) * limitNumber;
+    //             result = await Skill.findAll({
+    //                 where: searchConditions,
+    //                 order: [['id', 'DESC']],
+    //                 limit: limitNumber,
+    //                 offset: offset,
+    //             });
+    //         } else {
+    //             result = await Skill.findAll({
+    //                 where: searchConditions,
+    //                 order: [['id', 'DESC']],
+    //             });
+    //         }
+    //         console.log("result", result);
+
+    //         if (result instanceof Error) {
+    //             return new HttpException(400, result.message);
+    //         }
+
+    //         return {
+    //             data: result,
+    //             pagination: search.page && search.limit ? {
+    //                 page: Number(search.page),
+    //                 limit: Number(search.limit),
+    //                 totalRecords: result.length
+    //             } : null
+    //         };
+    //     } catch (error) {
+    //         console.log(error);
+
+    //         // return {
+    //         //     error: error
+    //         // };
+    //     }
+    // }
+
     public findAll = async (model: Skill, search: Partial<ISearchAndPagination>) => {
         console.log("model", model);
-        
         try {
             let result;
             const { page, limit, key, ...filteredModel } = model as any;
@@ -82,14 +141,8 @@ export class EmployeeStatusService {
                 [Op.and]: [{}, { ...filteredModel }]
             };
 
-            if (key) {
-                searchConditions[Op.and].push({
-                    [Op.or]: [
-                        { name: { [Op.like]: `%${key}%` } },
-                        { phone: { [Op.like]: `%${key}%` } },
-                    ]
-                });
-            }
+            console.log("searchConditions", searchConditions);
+
 
             if (search.page && search.limit) {
                 const pageNumber = parseInt(search.page.toString(), 10);
@@ -108,7 +161,7 @@ export class EmployeeStatusService {
                 });
             }
             console.log("result", result);
-            
+
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
@@ -183,7 +236,7 @@ export class EmployeeStatusService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
@@ -206,6 +259,78 @@ export class EmployeeStatusService {
             }
             return {
                 data: ids
+            }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+    // public checkEmployeeByStatus = async (employeeStatus: boolean) => {
+    //     try {
+    //         const result = await Skill.findAll({
+    //             where: {
+    //                 employeeStatus: employeeStatus
+    //             }
+    //         });
+    //         if (result instanceof Error) {
+    //             return new HttpException(400, result.message);
+    //         }
+    //         return {
+    //             data: result
+    //         }
+    //     } catch (error) {
+    //         return {
+    //             error: error
+    //         }
+    //     }
+    // }
+    public checkEmployeeByStatus = async (employeeStatus: boolean) => {
+        try {
+            const result = await Skill.findAll({
+                where: {
+                    employeeStatus: employeeStatus
+                }
+            });
+            if (result instanceof Error) {
+                return new HttpException(400, result.message);
+            }
+            return {
+                data: result
+            }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+    // public getListEmployeeIdByStatus = async (model: Skill) => {
+    //     let query = `SELECT * FROM EmployeeStatuses WHERE employeeStatus = ${model.employeeStatus} AND branchId = ${model.branchId} order by updatedAt asc`;
+    //     try {
+    //         const result = await Skill.sequelize?.query(query);
+    //         if (result instanceof Error) {
+    //             return new HttpException(400, result.message);
+    //         }
+    //         return {
+    //             data: (result as any)[0]
+    //         }
+    //     } catch (error) {
+    //         return {
+    //             error: error
+    //         }
+    //     }
+    // }
+    public getListEmployeeIdByStatus = async (branchId: number, employeeStatus: number) => {
+        let query = `SELECT * FROM EmployeeStatuses WHERE employeeStatus = ${employeeStatus} AND branchId = ${branchId} order by updatedAt asc`;
+        try {
+            const result = await Skill.sequelize?.query(query);
+            if (result instanceof Error) {
+                return new HttpException(400, result.message);
+            }
+            console.log("result list employee by status asc", result);
+            
+            return {
+                data: (result as any)[0]
             }
         } catch (error) {
             return {

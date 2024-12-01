@@ -192,6 +192,25 @@ const errorMessages = {
     APPOINTMENT_NOT_ALLOW: "Không thể thay đổi trạng thái lịch hẹn",
     APPOINTMENT_STATUS_NEW: "Lịch hẹn mới",
     APPOINTMENT_STATUS_PROCESSING: "Đang xử lý",
+    //notification
+    FIND_SUCCESS: "Tìm thấy",
+    FIND_FAILED: "Không tìm thấy",
+    //login
+    ACCOUNT_NOT_EXISTED: "Tài khoản không tồn tại",
+    // new
+    // CHECKED_IN: 'Chưa Check-in',
+    // PENDING: 'Đang Đợi',
+    // SERVING: 'Đang Phục Vụ',
+    // COMPLETED: 'Hoàn Thành',
+    // CANCELED: 'Đã Hủy',
+    NOT_ENOUGH_SKILL: 'Không đủ kỹ năng',
+    NOT_ENOUGH_EMPLOYEE: 'Không đủ nhân viên',
+    NOT_ENOUGH_SERVICE: 'Không đủ dịch vụ',
+    NOT_ENOUGH_SLOT: 'Không đủ slot',
+    NOT_ENOUGH_SLOT_SERVICE: 'Không đủ slot dịch vụ',
+    NOT_ENOUGH_SLOT_EMPLOYEE: 'Không đủ slot nhân viên',
+    EMPLOYY_NOT_ENOUGH_SKILL: 'Nhân viên không đủ kỹ năng',
+    EMPLOY_ENOUGH_SKILL: 'Nhân viên đủ kỹ năng',
 };
 exports.default = errorMessages;
 //# sourceMappingURL=constants.js.map

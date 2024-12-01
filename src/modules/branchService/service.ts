@@ -5,7 +5,7 @@ import { ISearchAndPagination } from "@core/types/express";
 import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 
-export class SkillService {
+export class BranchService {
     public create = async (model: Partial<Skill>) => {
         try {
             const check = await checkExistSequelize(Skill, 'name', model.name!);

@@ -21,7 +21,7 @@ export class EmployeeRoute implements IRoute {
         this.router.put(this.path + '/update-status/:id', AuthMiddleware.authorization, this.userController.updateStatus);
         this.router.delete(this.path + '/delete-list', AuthMiddleware.authorization, this.userController.deleteList);
         this.router.delete(this.path + '/:id', AuthMiddleware.authorization, this.userController.delete);
-        this.router.get(this.path + '/find-one/:id', AuthMiddleware.authorization, this.userController.findOne);
+        this.router.get(this.path + '/find-one', AuthMiddleware.authorization, this.userController.findOne);
         this.router.get(this.path + '/find-by-id/:id', AuthMiddleware.authorization, this.userController.findById);
         this.router.get(this.path + '/find-all-employee-status-in-branch', AuthMiddleware.authorization, this.userController.findAllEmployeeWithWorkingStatus);
         this.router.get(this.path + '/', AuthMiddleware.authorization, this.userController.findAll);

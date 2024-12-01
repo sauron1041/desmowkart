@@ -84,25 +84,21 @@ class Database {
             }
         });
     }
-    query(query, params) {
-        return __awaiter(this, void 0, void 0, function* () {
-            let connection = null;
-            try {
-                connection = yield this.getConnection();
-                const [results] = yield connection.query(query, params);
-                return results;
-            }
-            catch (error) {
-                logger_1.default.error("query failed");
-                throw error;
-            }
-            finally {
-                if (connection) {
-                    yield this.closeConnection(connection);
-                }
-            }
-        });
-    }
+    // async query(query: string, params?: any[]) {
+    //     let connection: mysql.PoolConnection | null = null;
+    //     try {
+    //         connection = await this.getConnection();
+    //         const [results] = await connection.query(query, params);
+    //         return results;
+    //     } catch (error) {
+    //         Logger.error("query failed");
+    //         throw error;
+    //     } finally {
+    //         if (connection) {
+    //             await this.closeConnection(connection);
+    //         }
+    //     }
+    // }
     queryOne(query, params) {
         return __awaiter(this, void 0, void 0, function* () {
             let connection = null;
@@ -113,6 +109,115 @@ class Database {
             }
             catch (error) {
                 logger_1.default.error("query one failed");
+                throw error;
+            }
+            finally {
+                if (connection) {
+                    yield this.closeConnection(connection);
+                }
+            }
+        });
+    }
+    beginTransaction() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection = null;
+            try {
+                connection = yield this.getConnection();
+                yield connection.beginTransaction();
+                return connection;
+            }
+            catch (error) {
+                logger_1.default.error("begin transaction failed");
+                throw error;
+            }
+        });
+    }
+    commitTransaction(connection) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield connection.commit();
+            }
+            catch (error) {
+                logger_1.default.error("commit transaction failed");
+                throw error;
+            }
+            finally {
+                if (connection) {
+                    yield this.closeConnection(connection);
+                }
+            }
+        });
+    }
+    rollbackTransaction(connection) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield connection.rollback();
+            }
+            catch (error) {
+                logger_1.default.error("rollback transaction failed");
+                throw error;
+            }
+            finally {
+                if (connection) {
+                    yield this.closeConnection(connection);
+                }
+            }
+        });
+    }
+    createTransaction() {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection = null;
+            try {
+                connection = yield this.getConnection();
+                yield connection.beginTransaction();
+                return connection;
+            }
+            catch (error) {
+                logger_1.default.error("create transaction failed");
+                throw error;
+            }
+        });
+    }
+    endTransaction(connection) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield connection.commit();
+            }
+            catch (error) {
+                logger_1.default.error("end transaction failed");
+                throw error;
+            }
+            finally {
+                if (connection) {
+                    yield this.closeConnection(connection);
+                }
+            }
+        });
+    }
+    transaction(connection, query, params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            try {
+                yield connection.query(query, params);
+            }
+            catch (error) {
+                logger_1.default.error("transaction failed");
+                throw error;
+            }
+        });
+    }
+    // const result = await sequelize.query(
+    //     `SELECT * FROM orders WHERE id IN (SELECT orderId FROM orderDetails WHERE id = ${orderDetailId})`,
+    //     { type: sequelize.QueryTypes.SELECT }
+    query(query, params) {
+        return __awaiter(this, void 0, void 0, function* () {
+            let connection = null;
+            try {
+                connection = yield this.getConnection();
+                const [results] = yield connection.query(query, params);
+                return results;
+            }
+            catch (error) {
+                logger_1.default.error("query failed");
                 throw error;
             }
             finally {

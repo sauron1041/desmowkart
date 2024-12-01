@@ -12,8 +12,9 @@ var __importDefault = (this && this.__importDefault) || function (mod) {
     return (mod && mod.__esModule) ? mod : { "default": mod };
 };
 Object.defineProperty(exports, "__esModule", { value: true });
-exports.checkExist = void 0;
+exports.checkExistSequelize = exports.checkExist = void 0;
 const database_1 = __importDefault(require("@core/config/database"));
+const sequelize_1 = require("sequelize");
 const checkExist = (tableName, column, value, id) => __awaiter(void 0, void 0, void 0, function* () {
     let query = `SELECT * FROM ${tableName} WHERE ${column} = ?`;
     const params = [value];
@@ -27,4 +28,28 @@ const checkExist = (tableName, column, value, id) => __awaiter(void 0, void 0, v
     return false;
 });
 exports.checkExist = checkExist;
+const checkExistSequelize = (model, column, value, id) => __awaiter(void 0, void 0, void 0, function* () {
+    if (id) {
+        const checkExist = yield model.findOne({
+            where: {
+                [column]: value,
+                id: {
+                    [sequelize_1.Op.ne]: id
+                }
+            }
+        });
+        if (checkExist)
+            return checkExist;
+        return false;
+    }
+    const checkExist = yield model.findOne({
+        where: {
+            [column]: value
+        }
+    });
+    if (checkExist)
+        return checkExist;
+    return false;
+});
+exports.checkExistSequelize = checkExistSequelize;
 //# sourceMappingURL=checkExist.js.map

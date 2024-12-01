@@ -14,14 +14,16 @@ import { Employee } from "modules/employee";
 import Service from "modules/service/model";
 import { generateCodePrefixChar } from "@core/utils/gennerate.code";
 import ServiceRequest from "modules/serviceRequest/model";
+import { databaseSequelize } from "@core/config/databaseSequelize";
+import database from "@core/config/database";
 
 export class AppointmentService {
 
-    private serviceRequestService = new ServiceRequestService();
+    public serviceRequestService = new ServiceRequestService();
 
-    constructor() {
-        this.serviceRequestService = new ServiceRequestService();
-    }
+    // constructor() {
+    //     this.serviceRequestService = new ServiceRequestService();
+    // }
 
     public create = async (model: Partial<Appointment>) => {
         try {
@@ -38,7 +40,8 @@ export class AppointmentService {
                     code: code
                 }
             }
-        } catch (error) {
+        }
+        catch (error) {
             return {
                 error: error
             }
@@ -95,6 +98,9 @@ export class AppointmentService {
         }
     }
     public findAll = async (model: Appointment, search: Partial<ISearchAndPagination>) => {
+        // session of customer
+        // const statusCompleted = 2;
+        // let countSessionQuery = ` SELECT COUNT(*) as count FROM appointments WHERE customerId = ${model.customerId} and serviceId = ${model.serviceId} and status = ${statusCompleted}  and isRemoved = false`;
         try {
             let result;
             const { page, limit, key, ...filteredModel } = model as any;
@@ -111,12 +117,39 @@ export class AppointmentService {
                 });
             }
 
+            // if(search.fromDate && search.toDate) {
+            //     delete search.fromDate;
+            //     delete search.toDate;
+            //     searchConditions[Op.and].push({
+            //         startTime: {
+            //             [Op.between]: [model.time, model.time]
+            //         }
+            //     });
+            // }
+            // if (search.fromDate && search.toDate) {
+            //     searchConditions[Op.and].push({
+            //       time: {
+            //         [Op.gte]: searchConditions.fromDate, // Greater than or equal to fromDate (assuming DATETIME or TIMESTAMP)
+            //         [Op.lte]: searchConditions.toDate   // Less than or equal to toDate
+            //       },
+            //       requeried: false
+            //     });
+            //   }
+
+            if (search.fromDate && search.toDate) {
+                searchConditions[Op.and].push({
+                    time: {
+                        [Op.gte]: search.fromDate, // Greater than or equal to fromDate (assuming DATETIME or TIMESTAMP)
+                        [Op.lte]: search.toDate   // Less than or equal to toDate
+                    }
+                });
+            }
             const options: any = {
                 where: searchConditions,
                 order: [['id', 'DESC']],
                 include: [
                     { model: Branch, attributes: ['id', 'name'], required: false },
-                    { model: Service, attributes: ['id', 'name'], required: false },
+                    { model: Service, attributes: ['id', 'name', 'totalSessions'], required: false },
                     {
                         model: Customer,
                         attributes: ['id', 'userId'],
@@ -158,8 +191,36 @@ export class AppointmentService {
                 return new HttpException(400, result.message);
             }
 
+
             // map 
-            result = result.map((item: any) => {
+            result = Promise.all(result.map(async (item: any) => {
+                const statusCompleted = 2;
+                // let query = `SELECT COUNT(*) as count FROM appointments WHERE customerId = ${item.customerId} and serviceId = ${item.serviceId}   and isRemoved = false`;
+                let query = `
+                    SELECT COUNT(*) as count 
+                    FROM appointments 
+                    WHERE customerId = ${item.customerId} 
+                      AND serviceId = ${item.serviceId} 
+                      AND isRemoved = false 
+                      and status = ${statusCompleted}
+                      AND id <= ${item.id}
+                `;
+                const countSession = await databaseSequelize.getSequelize().query(query, {})
+                console.log("countSession", countSession);
+
+                let queryTotalPurchasedQuantity = `SELECT 
+                CAST(SUM(od.quantity) AS UNSIGNED) AS totalPurchasedQuantity
+                FROM 
+                    OrderDetails od
+                JOIN 
+                    Orders o ON od.orderId = o.id
+                WHERE 
+                    od.serviceId = ${item.serviceId}
+                    AND o.customerId = ${item.customerId}
+                    AND o.isRemoved = false;
+                `
+                const totalPurchasedQuantity = await databaseSequelize.getSequelize().query(queryTotalPurchasedQuantity, {})
+
                 return {
                     id: item.id,
                     code: item.code,
@@ -180,11 +241,19 @@ export class AppointmentService {
                     employeeName: item.employee ? item.employee.user.name : null,
                     time: item.time,
                     reminderSent: item.reminderSent,
+                    currentSession: countSession !== null ? (countSession as any)[0][0].count : 0,
+                    totalPurchasedQuantity: totalPurchasedQuantity !== null ? (totalPurchasedQuantity as any)[0][0].totalPurchasedQuantity : 0,
+                    totalSessionOfService: item.service ? item.service.totalSessions : 0,
+                    // appointment: item.appointment,
+                    // branch: item.branch,
+                    // customer: item.customer,
+                    // employee: item.employee,
+                    // service: item.service
                 }
-            });
-            const totalRecords = result.length;
+            }));
+            const totalRecords = (await result).length;
             return {
-                data: result,
+                data: await result,
                 pagination: search.page && search.limit ? {
                     page: Number(search.page),
                     limit: Number(search.limit),
@@ -286,8 +355,14 @@ export class AppointmentService {
         }
     }
     public appointmentApproval = async (id: number, status: AppointmentStatus) => {
+        console.log("statw113212us", status);
+        console.log("id", id);
+
+
         try {
             const check = await checkExistSequelize(Appointment, 'id', id);
+            console.log("check", check);
+
             if (!check) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
@@ -304,13 +379,14 @@ export class AppointmentService {
             console.log("checkServiceRequestExist", checkServiceRequestExist);
 
             if (checkServiceRequestExist) {
-            } else {
+            } else if (status == 1) { // status = 1 checkin -> tao service request
                 const serviceRequest = await this.serviceRequestService.create({
                     appointmentId: id,
                     currentStatus: status as any,
                     userId: check.dataValues.userId,
                     appointment: check,
                     branchId: check.dataValues.branchId,
+                    employeeId: check.dataValues.employeeId != null ? check.dataValues.employeeId : null,
                 })
             }
             return {

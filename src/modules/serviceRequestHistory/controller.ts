@@ -27,6 +27,22 @@ export class SkillController {
             return new HttpException(500, message.CREATE_FAILED);
         }
     }
+    public createUpdate = async (req: Request, res: Response) => {
+        const model: User = req.body as any as User;
+        try {
+            const result = await this.categoryService.createUpdate(model);
+            if (result instanceof HttpException && result.field) {
+                return sendResponse(res, result.status, result.message, null, result.field);
+            }
+            if (result instanceof HttpException) {
+                return sendResponse(res, result.status, result.message);
+            }
+            return sendResponse(res, 200, message.CREATE_SUCCESS, result);
+
+        } catch (error) {
+            return new HttpException(500, message.CREATE_FAILED);
+        }
+    }
     public update = async (req: Request, res: Response) => {
         const model: User = req.body as any as User;
         const id: number = req.params.id as any;

@@ -24,6 +24,7 @@ import EmployeeStatus from 'modules/employeeStatus/model';
 import Skill from 'modules/skill/model';
 import EmployeeSkill from 'modules/employeeSkill/model';
 import ServiceSkill from 'modules/serviceSkill/model';
+import UserConnection from 'modules/socket/userConnection';
 
 dotenv.config();
 
@@ -34,18 +35,29 @@ interface IDatabaseConfig {
     host: string;
     port: number;
     dialect: Dialect;
-    ssl: boolean;
+    ssl?: boolean;
 }
 
+// const dbConfig: IDatabaseConfig = {
+//     username: process.env.DB_USERNAME || 'avnadmin',
+//     password: process.env.DB_PASSWORD || 'AVNS_cPts5ZwTubT3zrn3s68',
+//     database: process.env.DB_NAME || 'defaultdb',
+//     host: process.env.DB_HOST || 'mysql-3dfd2c1e-tranminhthuan1268-b6c3.c.aivencloud.com',
+//     port: parseInt(process.env.DB_PORT || '12706'),
+//     dialect: 'mysql',
+//     ssl: process.env.DB_SSL === 'true',
+// };
 const dbConfig: IDatabaseConfig = {
-    username: process.env.DB_USERNAME || 'avnadmin',
-    password: process.env.DB_PASSWORD || 'AVNS_cPts5ZwTubT3zrn3s68',
-    database: process.env.DB_NAME || 'defaultdb',
-    host: process.env.DB_HOST || 'mysql-3dfd2c1e-tranminhthuan1268-b6c3.c.aivencloud.com',
-    port: parseInt(process.env.DB_PORT || '12706'),
+    username: process.env.DB_USERNAME || 'root',
+    password: process.env.DB_PASSWORD || '12345678',
+    database: process.env.DB_NAME || 'beauty_salon_management_system_v4',
+    host: process.env.DB_HOST || 'localhost',
+    // port: parseInt(process.env.DB_PORT || '12706'),
+    port: Number(process.env.DB_PORT) || 3306,
     dialect: 'mysql',
-    ssl: process.env.DB_SSL === 'true',
+    // ssl: process.env.DB_SSL === 'true',
 };
+
 
 class Database {
     private static instance: Sequelize;
@@ -64,17 +76,17 @@ class Database {
                 models: [
                     User, Customer, Employee, Token, Branch, Category, Service, MembershipLevel, Appointment,
                     ServiceRequest, ServiceRequestStatusHistory, ServiceRequestImage, Feedback, Order,
-                    OrderDetail, Payment, Skill, EmployeeStatus, EmployeeSkill, ServiceSkill,
+                    OrderDetail, Payment, Skill, EmployeeStatus, EmployeeSkill, ServiceSkill, UserConnection
                 ],
-                dialectOptions: dbConfig.ssl
-                    ? {
-                          ssl: {
-                              require: true,
-                              rejectUnauthorized: false,
-                              ca: fs.readFileSync(path.resolve(__dirname, "../../../ca.pem")),
-                          },
-                      }
-                    : {},
+                // dialectOptions: dbConfig.ssl
+                //     ? {
+                //           ssl: {
+                //               require: true,
+                //               rejectUnauthorized: false,
+                //               ca: fs.readFileSync(path.resolve(__dirname, "../../../ca.pem")),
+                //           },
+                //       }
+                //     : {},
                 pool: {
                     max: 10,
                     min: 0,

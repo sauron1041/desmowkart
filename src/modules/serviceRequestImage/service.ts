@@ -5,6 +5,7 @@ import { ISearchAndPagination } from "@core/types/express";
 import { checkExistSequelize } from "@core/utils/checkExist";
 import { Op } from 'sequelize';
 import { CloudDinaryService } from "modules/cloudinary/service";
+import ServiceRequestImageDto from "./dtos/create";
 
 export class ServiceRequestImageService {
     private cloudinaryService = new CloudDinaryService();
@@ -12,22 +13,24 @@ export class ServiceRequestImageService {
 
     // model: Partial<Skill & { note?: string }
 
-    public create = async (model: Partial<ServiceRequestImage & {image?: any}>) => {
+    public create = async (model: Partial<ServiceRequestImage & { image?: any }>) => {
+        // id, imageUrl, description, status, customerId, employeeId, uploadedAt, isRemoved, serviceRequestStatusHistoryId, createdAt, updatedAt
+
         // public create = async (model: Partial<ServiceRequestImage & {image?: any, serviceRequestCode?: string}>) => {
         try {
-            let nameImage : string = '';
+            let nameImage: string = '';
             // if (model.serviceId != undefined && model.customerId != undefined && model.serviceId != undefined && model.image != undefined && model.status != undefined) {
             //     nameImage = model.serviceId + '-' + model.customerId + '-' + model.serviceId + '-' + model.image + '-' + model.status + '-' + new Date().getTime() + '.png'
             // }
             if (model.image) {
                 const image = model.image
                 const url = await this.cloudinaryService.uploadSessionImageToCloud(image, this.folder, nameImage);
-                
+
                 if (url instanceof Error) {
                     return new HttpException(400, url.message);
                 }
                 model.imageUrl = (url as any).url as string;
-            } 
+            }
             const result = await ServiceRequestImage.create(model);
             console.log(result);
             if (result instanceof Error) {
@@ -42,6 +45,84 @@ export class ServiceRequestImageService {
             }
         }
     }
+
+    public createUpdate = async (model: Partial<ServiceRequestImageDto>) => {
+        // id, imageUrl, description, status, customerId, employeeId, uploadedAt, isRemoved, serviceRequestStatusHistoryId, createdAt, updatedAt
+
+        // public create = async (model: Partial<ServiceRequestImage & {image?: any, serviceRequestCode?: string}>) => {
+        try {
+            let nameImage: string = '';
+            // if (model.serviceId != undefined && model.customerId != undefined && model.serviceId != undefined && model.image != undefined && model.status != undefined) {
+            //     nameImage = model.serviceId + '-' + model.customerId + '-' + model.serviceId + '-' + model.image + '-' + model.status + '-' + new Date().getTime() + '.png'
+            // }
+            if (model.imageFile) {
+                console.log("model.imageFile", model.imageFile);
+
+                const image = model.imageFile
+                const url = await this.cloudinaryService.uploadSessionImageToCloud(image, this.folder, nameImage);
+
+                if (url instanceof Error) {
+                    return new HttpException(400, url.message);
+                }
+                model.imageUrl = (url as any).url as string;
+            }
+            console.log("mode111l", model);
+            
+            const result = await ServiceRequestImage.create(model);
+            console.log("result111", result);
+            if (result instanceof Error) {
+                return new HttpException(400, result.message);
+            }
+            return {
+                data: result
+            }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+
+    public uploadImage = async (model: Partial<ServiceRequestImage & { imageFile?: any }>) => {
+        // id, imageUrl, description, status, customerId, employeeId, uploadedAt, isRemoved, serviceRequestStatusHistoryId, createdAt, updatedAt
+
+        // public create = async (model: Partial<ServiceRequestImage & {image?: any, serviceRequestCode?: string}>) => {
+        try {
+            let nameImage: string = '';
+            // if (model.serviceId != undefined && model.customerId != undefined && model.serviceId != undefined && model.image != undefined && model.status != undefined) {
+            //     nameImage = model.serviceId + '-' + model.customerId + '-' + model.serviceId + '-' + model.image + '-' + model.status + '-' + new Date().getTime() + '.png'
+            // }
+            if (model.imageFile) {
+                const image = model.imageFile
+                const url = await this.cloudinaryService.uploadSessionImageToCloud(image, this.folder, nameImage);
+
+                if (url instanceof Error) {
+                    return new HttpException(400, url.message);
+                }
+                model.imageUrl = (url as any).url as string;
+
+
+                return {
+                    data: {
+                        imageUrl: model.imageUrl
+                    }
+                }
+            }
+            // const result = await ServiceRequestImage.create(model);
+            // console.log(result);
+            // if (result instanceof Error) {
+            //     return new HttpException(400, result.message);
+            // }
+            // return {
+            //     data: result
+            // }
+        } catch (error) {
+            return {
+                error: error
+            }
+        }
+    }
+
     public update = async (model: Partial<ServiceRequestImage>, id: number) => {
         try {
             const check = await checkExistSequelize(ServiceRequestImage, 'id', id);
@@ -196,7 +277,7 @@ export class ServiceRequestImageService {
             if (result instanceof Error) {
                 return new HttpException(400, result.message);
             }
-            if(!result) {
+            if (!result) {
                 return new HttpException(404, errorMessages.NOT_FOUND, 'id');
             }
             return {
@@ -229,7 +310,7 @@ export class ServiceRequestImageService {
     public findAllServiceRequestImageByServiceId = async (serviceId: number) => {
         try {
             console.log("serviceId", serviceId);
-            
+
             const result = await ServiceRequestImage.findAll({
                 where: {
                     serviceId: serviceId
