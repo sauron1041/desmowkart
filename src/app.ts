@@ -20,14 +20,14 @@ import errorHandler from "@core/exceptions/error.handler";
 
 class App {
     public app: express.Application
-    public port: number | string
+    public port: number | string = 10000;
     public production: boolean = process.env.NODE_ENV === 'production' ? true : false
     public swaggerDocs: object;
 
     constructor(routes?: IRoute[]) {
         this.swaggerDocs = swaggerJsDoc(this.swaggerOptions);
         this.app = express();
-        this.port = process.env.PORT || 3001;
+        this.port = 10000
         this.readRootPathProject();
         this.connectMySql();
         this.initialMiddlewares()
