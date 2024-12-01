@@ -1,5 +1,9 @@
 require('module-alias/register');
 require('dotenv').config();
+
+const port = process.env.PORT || 3001;
+console.log("port111111", port);
+
 import App from "./app"
 import 'reflect-metadata';
 import { UserRoute } from "modules/user";
@@ -22,8 +26,6 @@ import { OrderRoute } from "modules/order";
 import { OrderDetailRoute } from "modules/orderDetail";
 import { EmployeeSkillRoute } from "modules/employeeSkill";
 
-const port = process.env.PORT || 3001;
-console.log("port111111", port);
 
 
 const routes = [
