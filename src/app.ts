@@ -207,7 +207,7 @@ class App {
 
     // Start the express server
     public listen() {
-        this.server.listen(process.env.PORT || 10000, () => {
+        this.server.listen(Number(process.env.PORT) || 10000, '0.0.0.0', () => {
             console.log(`Server is running on port ${process.env.PORT || 10000}`);
         });
     }

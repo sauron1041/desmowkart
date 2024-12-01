@@ -50,6 +50,4 @@ const routes = [
     new OrderDetailRoute(),
 ];
 
-const app = new App(routes, port);
-
-app.listen();
+const app = new App(routes, port).listen();
