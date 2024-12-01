@@ -22,6 +22,10 @@ import { OrderRoute } from "modules/order";
 import { OrderDetailRoute } from "modules/orderDetail";
 import { EmployeeSkillRoute } from "modules/employeeSkill";
 
+const port = process.env.PORT || 3001;
+console.log("port111111", port);
+
+
 const routes = [
     new UserRoute(),
     new AuthRoute(),
@@ -44,6 +48,6 @@ const routes = [
     new OrderDetailRoute(),
 ];
 
-const app = new App(routes);
+const app = new App(routes, port);
 
 app.listen();

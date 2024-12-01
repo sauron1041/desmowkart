@@ -127,9 +127,9 @@ class App {
     private socketService = SocketService.getInstance();
     public port: number | string;
 
-    constructor(routes?: IRoute[]) {
+    constructor(routes?: IRoute[], port?: number | string) {
         this.app = express();
-        this.port = process.env.PORT || 3001;
+        this.port = port!;
         this.eventEmitter();
         this.server = http.createServer(this.app);  // Ensure you create the HTTP server
         this.initialMiddlewares();
